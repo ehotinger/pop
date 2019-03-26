@@ -77,9 +77,9 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 		t.NextChar()
 		if t.ch == '&' {
 			t.NextChar()
-			tokenKind = DoubleAmphersand
+			tokenKind = DoubleAmpersand
 		} else {
-			tokenKind = Amphersand
+			tokenKind = Ampersand
 		}
 		break
 	case '(':

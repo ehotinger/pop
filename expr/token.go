@@ -15,8 +15,8 @@ const (
 	Exclamation
 	ExclamationEqual
 	Percent
-	DoubleAmphersand
-	Amphersand
+	DoubleAmpersand
+	Ampersand
 	OpenParenthesis
 	CloseParenthesis
 	Asterisk
@@ -52,10 +52,10 @@ func (tk TokenKind) ToString() string {
 		return "ExclamationEqual"
 	case Percent:
 		return "Percent"
-	case DoubleAmphersand:
-		return "DoubleAmphersand"
-	case Amphersand:
-		return "Amphersand"
+	case DoubleAmpersand:
+		return "DoubleAmpersand"
+	case Ampersand:
+		return "Ampersand"
 	case OpenParenthesis:
 		return "OpenParenthesis"
 	case CloseParenthesis:
