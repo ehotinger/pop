@@ -5,6 +5,4 @@
 *.dylib
 *.test
 *.out
-
-dynamic*.cs
-main
+bin/

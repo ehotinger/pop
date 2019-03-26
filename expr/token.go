@@ -2,16 +2,16 @@ package expr
 
 // Token represents a single parsed token.
 type Token struct {
-	Kind     TokenKind
+	Type     TokenType
 	Value    interface{}
 	Text     string
 	Position int
 }
 
-type TokenKind int
+type TokenType int
 
 const (
-	Unknown TokenKind = iota
+	Unknown TokenType = iota
 	Exclamation
 	ExclamationEqual
 	Percent
@@ -44,8 +44,8 @@ const (
 	StringLiteral
 )
 
-func (tk TokenKind) ToString() string {
-	switch tk {
+func (t TokenType) ToString() string {
+	switch t {
 	case Exclamation:
 		return "Exclamation"
 	case ExclamationEqual:

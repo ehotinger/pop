@@ -54,116 +54,116 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 	}
 
 	token = &Token{
-		Kind: Unknown,
+		Type: Unknown,
 	}
 
-	var tokenKind TokenKind
+	var tokenType TokenType
 	tokenPos := t.position
 	switch t.ch {
 	case '!':
 		t.NextChar()
 		if t.ch == '=' {
 			t.NextChar()
-			tokenKind = ExclamationEqual
+			tokenType = ExclamationEqual
 		} else {
-			tokenKind = Exclamation
+			tokenType = Exclamation
 		}
 		break
 	case '%':
 		t.NextChar()
-		tokenKind = Percent
+		tokenType = Percent
 		break
 	case '&':
 		t.NextChar()
 		if t.ch == '&' {
 			t.NextChar()
-			tokenKind = DoubleAmpersand
+			tokenType = DoubleAmpersand
 		} else {
-			tokenKind = Ampersand
+			tokenType = Ampersand
 		}
 		break
 	case '(':
 		t.NextChar()
-		tokenKind = OpenParenthesis
+		tokenType = OpenParenthesis
 		break
 	case ')':
 		t.NextChar()
-		tokenKind = CloseParenthesis
+		tokenType = CloseParenthesis
 		break
 	case '*':
 		t.NextChar()
-		tokenKind = Asterisk
+		tokenType = Asterisk
 		break
 	case '+':
 		t.NextChar()
-		tokenKind = Plus
+		tokenType = Plus
 		break
 	case '-':
 		t.NextChar()
-		tokenKind = Minus
+		tokenType = Minus
 		break
 	case '/':
 		t.NextChar()
-		tokenKind = Slash
+		tokenType = Slash
 		break
 	case '<':
 		t.NextChar()
 		if t.ch == '=' {
 			t.NextChar()
-			tokenKind = LessThanEqual
+			tokenType = LessThanEqual
 		} else {
-			tokenKind = LessThan
+			tokenType = LessThan
 		}
 		break
 	case '=':
 		t.NextChar()
 		if t.ch == '=' {
 			t.NextChar()
-			tokenKind = DoubleEqual
+			tokenType = DoubleEqual
 		} else {
-			tokenKind = Equal
+			tokenType = Equal
 		}
 		break
 	case '>':
 		t.NextChar()
 		if t.ch == '=' {
 			t.NextChar()
-			tokenKind = GreaterThanEqual
+			tokenType = GreaterThanEqual
 		} else {
-			tokenKind = GreaterThan
+			tokenType = GreaterThan
 		}
 		break
 	case ',':
 		t.NextChar()
-		tokenKind = Comma
+		tokenType = Comma
 		break
 	case '.':
 		t.NextChar()
-		tokenKind = Dot
+		tokenType = Dot
 		break
 	case ':':
 		t.NextChar()
-		tokenKind = Colon
+		tokenType = Colon
 		break
 	case '?':
 		t.NextChar()
-		tokenKind = Question
+		tokenType = Question
 		break
 	case '[':
 		t.NextChar()
-		tokenKind = OpenBracket
+		tokenType = OpenBracket
 		break
 	case ']':
 		t.NextChar()
-		tokenKind = CloseBracket
+		tokenType = CloseBracket
 		break
 	case '|':
 		t.NextChar()
 		if t.ch == '|' {
 			t.NextChar()
-			tokenKind = DoubleBar
+			tokenType = DoubleBar
 		} else {
-			tokenKind = Bar
+			tokenType = Bar
 		}
 		break
 	case '"':
@@ -183,7 +183,7 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 				break
 			}
 		}
-		tokenKind = StringLiteral
+		tokenType = StringLiteral
 		break
 	default:
 		if unicode.IsLetter(t.ch) || t.ch == '@' || t.ch == '_' {
@@ -193,11 +193,11 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 					break
 				}
 			}
-			tokenKind = Identifier
+			tokenType = Identifier
 			break
 		}
 		if unicode.IsDigit(t.ch) {
-			tokenKind = IntegerLiteral
+			tokenType = IntegerLiteral
 
 			for {
 				t.NextChar()
@@ -206,7 +206,7 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 				}
 			}
 			if t.ch == '.' {
-				tokenKind = RealLiteral
+				tokenType = RealLiteral
 				t.NextChar()
 
 				if !unicode.IsDigit(t.ch) {
@@ -224,14 +224,14 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 			break
 		}
 		if t.position == t.length {
-			tokenKind = End
+			tokenType = End
 			break
 		}
 		return token, fmt.Errorf("parsing error at position %d, rune: %v", t.position, t.ch)
 	}
 	token.Text = string(t.text[tokenPos:t.position])
 	token.Position = tokenPos
-	token.Kind = tokenKind
+	token.Type = tokenType
 	return token, nil
 }
 

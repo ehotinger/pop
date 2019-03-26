@@ -13,7 +13,7 @@ func main() {
 	}
 
 	for _, token := range expression.GetTokens() {
-		log.Printf("token - kind: %s, text: %s", token.Kind.ToString(), token.Text)
+		log.Printf("token - kind: %s, text: %s", token.Type.ToString(), token.Text)
 	}
 
 	result, err := expression.Evaluate(nil)
