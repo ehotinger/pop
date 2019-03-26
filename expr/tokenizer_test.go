@@ -31,6 +31,27 @@ func TestNewTokenizer(t *testing.T) {
 	}
 }
 
+func TestNextChar(t *testing.T) {
+	for _, test := range []struct {
+		expression string
+		expected   []rune
+	}{
+		{"abc", []rune{'a', 'b', 'c', '\000', '\000'}},
+		{"1 > 0", []rune{'1', ' ', '>', ' ', '0', '\000'}},
+	} {
+		tokenizer, err := NewTokenizer(test.expression)
+		if err != nil {
+			t.Fatalf("unexpected err: %v", err)
+		}
+		for _, expectedCh := range test.expected {
+			if expectedCh != tokenizer.ch {
+				t.Fatalf("expected %v but got %v", expectedCh, tokenizer.ch)
+			}
+			tokenizer.NextChar()
+		}
+	}
+}
+
 func TestSetPosition(t *testing.T) {
 	for _, test := range []struct {
 		position int
