@@ -29,6 +29,7 @@ const (
 	NotEqualExpr
 	OrExpr
 	OrElseExpr // Short circuiting
+	ParameterExpr
 	PowerExpr
 	RightShiftExpr
 	SubtractExpr
@@ -88,6 +89,8 @@ func (e *AbstractExpression) ToString() string {
 		return "OrExpr"
 	case OrElseExpr:
 		return "OrElseExpr"
+	case ParameterExpr:
+		return "ParameterExpr"
 	case PowerExpr:
 		return "PowerExpr"
 	case RightShiftExpr:
