@@ -69,3 +69,25 @@ func TestSetPosition(t *testing.T) {
 		}
 	}
 }
+
+func TestHasNext(t *testing.T) {
+	for _, test := range []struct {
+		expression string
+		position   int
+		expected   bool
+	}{
+		{"1 > 0", 50, false},
+		{"1", 1, false},
+		{"1 > 0", 0, true},
+		{"1", 0, true},
+	} {
+		tokenizer, err := NewTokenizer(test.expression)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		tokenizer.position = test.position
+		if actual := tokenizer.HasNext(); actual != test.expected {
+			t.Fatalf("expected %v but got %v", test.expected, actual)
+		}
+	}
+}
