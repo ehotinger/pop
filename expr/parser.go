@@ -1,7 +1,5 @@
 package expr
 
-type Expression interface{}
-
 type ExpressionParser struct {
 	tokenizer *Tokenizer
 	tokens    []*Token

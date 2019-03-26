@@ -10,6 +10,8 @@ type Token struct {
 
 type TokenType int
 
+// TODO: Suffix with Token to avoid package conflict or
+// remove suffix from expression type and split package.
 const (
 	Unknown TokenType = iota
 	Exclamation
