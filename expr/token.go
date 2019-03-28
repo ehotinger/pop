@@ -8,6 +8,11 @@ type Token struct {
 	Position int
 }
 
+func (t *Token) Equals(u *Token) bool {
+	return t.Type == u.Type &&
+		t.Text == u.Text
+}
+
 type TokenType int
 
 // TODO: Suffix with Token to avoid package conflict or
