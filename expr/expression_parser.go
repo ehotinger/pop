@@ -25,7 +25,8 @@ func (ep *ExpressionParser) GetTokens() []*Token {
 	return ep.tokens
 }
 
-func (ep *ExpressionParser) parseTokens() (tokens []*Token, err error) {
+func (ep *ExpressionParser) parseTokens() ([]*Token, error) {
+	var tokens []*Token
 	for ep.tokenizer.HasNext() {
 		token, err := ep.tokenizer.NextToken()
 		if err != nil {
@@ -33,7 +34,7 @@ func (ep *ExpressionParser) parseTokens() (tokens []*Token, err error) {
 		}
 		tokens = append(tokens, token)
 	}
-	return tokens, err
+	return tokens, nil
 }
 
 func (ep *ExpressionParser) Evaluate(parameters map[string]interface{}) (interface{}, error) {

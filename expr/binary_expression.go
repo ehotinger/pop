@@ -34,9 +34,8 @@ func (e *BinaryExpression) ToString() string {
 	operator := e.GetOperator()
 	if operator == "" {
 		return fmt.Sprintf("%s (%s, %s)", e.self.ToString(), e.left.ToString(), e.right.ToString())
-	} else {
-		return fmt.Sprintf("(%s %s %s)", e.left.ToString(), operator, e.right.ToString())
 	}
+	return fmt.Sprintf("(%s %s %s)", e.left.ToString(), operator, e.right.ToString())
 }
 
 func (e *BinaryExpression) GetOperator() string {

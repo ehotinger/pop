@@ -68,11 +68,9 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 		} else {
 			tokenType = Exclamation
 		}
-		break
 	case '%':
 		t.NextChar()
 		tokenType = Percent
-		break
 	case '&':
 		t.NextChar()
 		if t.ch == '&' {
@@ -81,31 +79,24 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 		} else {
 			tokenType = Ampersand
 		}
-		break
 	case '(':
 		t.NextChar()
 		tokenType = OpenParenthesis
-		break
 	case ')':
 		t.NextChar()
 		tokenType = CloseParenthesis
-		break
 	case '*':
 		t.NextChar()
 		tokenType = Asterisk
-		break
 	case '+':
 		t.NextChar()
 		tokenType = Plus
-		break
 	case '-':
 		t.NextChar()
 		tokenType = Minus
-		break
 	case '/':
 		t.NextChar()
 		tokenType = Slash
-		break
 	case '<':
 		t.NextChar()
 		if t.ch == '=' {
@@ -114,7 +105,6 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 		} else {
 			tokenType = LessThan
 		}
-		break
 	case '=':
 		t.NextChar()
 		if t.ch == '=' {
@@ -123,7 +113,6 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 		} else {
 			tokenType = Equal
 		}
-		break
 	case '>':
 		t.NextChar()
 		if t.ch == '=' {
@@ -132,31 +121,24 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 		} else {
 			tokenType = GreaterThan
 		}
-		break
 	case ',':
 		t.NextChar()
 		tokenType = Comma
-		break
 	case '.':
 		t.NextChar()
 		tokenType = Dot
-		break
 	case ':':
 		t.NextChar()
 		tokenType = Colon
-		break
 	case '?':
 		t.NextChar()
 		tokenType = Question
-		break
 	case '[':
 		t.NextChar()
 		tokenType = OpenBracket
-		break
 	case ']':
 		t.NextChar()
 		tokenType = CloseBracket
-		break
 	case '|':
 		t.NextChar()
 		if t.ch == '|' {
@@ -165,7 +147,6 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 		} else {
 			tokenType = Bar
 		}
-		break
 	case '"':
 		fallthrough
 	case '\'':
@@ -184,7 +165,6 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 			}
 		}
 		tokenType = StringLiteral
-		break
 	default:
 		if unicode.IsLetter(t.ch) || t.ch == '@' || t.ch == '_' {
 			for {

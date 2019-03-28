@@ -16,6 +16,8 @@ COMMANDS=pop
 BINARIES=$(addprefix bin/,$(COMMANDS))
 INSTALLDIR=/usr/local
 
+all: lint binaries test
+
 .PHONY: binaries
 binaries: $(BINARIES) ## Build the binaries
 	@echo "+ $@"
@@ -24,7 +26,6 @@ FORCE:
 bin/%: cmd/% FORCE
 	@echo "+ $@${BINARY_SUFFIX}"
 	@CGO_ENABLED=0 go build ${GO_GCFLAGS} ${GO_BUILD_FLAGS} -o $@${BINARY_SUFFIX} ${GO_LDFLAGS} ${GO_TAGS} ./$<
-
 
 .PHONY: build
 build: ## Build the Go packages
@@ -41,12 +42,30 @@ lint: ## Run all linters
 	@echo "+ $@"
 	golangci-lint run
 
-
 .PHONY: test
 test: ## Runs the Go tests
 	@echo "+ $@"
 	@go test -v -tags "$(BUILDTAGS) cgo" $(shell go list ./... | grep -v vendor)
 
+.PHONY: install
+install: ## Install binaries
+	@echo "+ $@ $(BINARIES)"
+	@mkdir -p $(INSTALLDIR)/bin
+	@install $(BINARIES) $(INSTALLDIR)/bin
+
+.PHONY: vendor
+vendor: ## Updates the vendor directory
+	@$(RM) go.sum
+	@$(RM) -r vendor
+	GO111MODULE=on $(GO) mod init || true
+	GO111MODULE=on $(GO) mod tidy
+	GO111MODULE=on $(GO) mod vendor
+	@$(RM) Gopkg.toml Gopkg.lock
+
+.PHONY: verify-vendor
+verify-vendor: ## Verifies the vendor directory
+	GO111MODULE=on $(GO) mod verify
+
 .PHONY: help
 help: ## Prints this help menu
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort	
