@@ -11,13 +11,13 @@ type BinaryExpression struct {
 	self  *AbstractExpression
 }
 
-func NewBinaryExpression(nodeType ExpressionType, left *AbstractExpression, right *AbstractExpression, staticType reflect.Type) *BinaryExpression {
+func NewBinaryExpression(nodeType ExpressionType, left *AbstractExpression, right *AbstractExpression, kind reflect.Kind) *BinaryExpression {
 	return &BinaryExpression{
 		left:  left,
 		right: right,
 		self: &AbstractExpression{
 			nodeType: nodeType,
-			Type:     staticType,
+			Kind:     kind,
 		},
 	}
 }

@@ -12,14 +12,20 @@ func main() {
 		log.Fatal(err)
 	}
 
-	for _, token := range parser.GetTokens() {
-		log.Printf("token - kind: %s, text: %s", token.Type.ToString(), token.Text)
-	}
-
-	result, err := parser.Evaluate(nil)
+	expr, err := parser.ParseExpression()
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println(expr.ToString())
 
-	log.Println("Result:", result)
+	// for _, token := range parser.GetTokens() {
+	// 	log.Printf("token - kind: %s, text: %s", token.Type.ToString(), token.Text)
+	// }
+
+	// result, err := parser.Evaluate(nil)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// log.Println("Result:", result)
 }

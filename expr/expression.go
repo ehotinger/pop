@@ -42,10 +42,13 @@ type Expression interface {
 
 type AbstractExpression struct {
 	nodeType ExpressionType
-	Type     reflect.Type
+	Kind     reflect.Kind
 }
 
 func (e *AbstractExpression) ToString() string {
+	if e == nil {
+		return "UnknownExpr"
+	}
 	switch e.nodeType {
 	case AddExpr:
 		return "AddExpr"
@@ -111,8 +114,8 @@ func Add(left *AbstractExpression, right *AbstractExpression) (*BinaryExpression
 	if right == nil {
 		return nil, errors.New("right is nil")
 	}
-	if left.Type == right.Type && IsArithmetic(left.Type.Kind()) {
-		return NewBinaryExpression(AddExpr, left, right, left.Type), nil
+	if left.Kind == right.Kind && IsArithmetic(left.Kind) {
+		return NewBinaryExpression(AddExpr, left, right, left.Kind), nil
 	}
 	return nil, errors.New("invalid expression")
 }

@@ -7,11 +7,11 @@ type ParameterExpression struct {
 	name string
 }
 
-func NewParameterExpression(name string, staticType reflect.Type) *ParameterExpression {
+func NewParameterExpression(name string, kind reflect.Kind) *ParameterExpression {
 	return &ParameterExpression{
 		self: &AbstractExpression{
 			nodeType: ParameterExpr,
-			Type:     staticType,
+			Kind:     kind,
 		},
 		name: name,
 	}

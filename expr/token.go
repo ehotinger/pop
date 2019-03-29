@@ -1,16 +1,35 @@
 package expr
 
+import (
+	"strings"
+)
+
+const (
+	orIdentifier  = "or"
+	andIdentifier = "and"
+)
+
 // Token represents a single parsed token.
 type Token struct {
 	Type     TokenType
-	Value    interface{}
 	Text     string
 	Position int
+	// Value    interface{}
 }
 
 func (t *Token) Equals(u *Token) bool {
 	return t.Type == u.Type &&
 		t.Text == u.Text
+}
+
+// IsIdentifierWithName determines whether or not the token
+// is an identifier with the provided name.
+func (t *Token) IsIdentifierWithName(name string) bool {
+	if t == nil {
+		return false
+	}
+
+	return t.Type == Identifier && strings.EqualFold(t.Text, name)
 }
 
 type TokenType int
@@ -51,69 +70,103 @@ const (
 	StringLiteral
 )
 
+const (
+	ExclamationString      = "Exclamation"
+	ExclamationEqualString = "ExclamationEqual"
+	PercentString          = "Percent"
+	DoubleAmpersandString  = "DoubleAmpersand"
+	AmpersandString        = "Ampersand"
+	OpenParenthesisString  = "OpenParenthesis"
+	CloseParenthesisString = "CloseParenthesis"
+	AsteriskString         = "Asterisk"
+	PlusString             = "Plus"
+	MinusString            = "Minus"
+	SlashString            = "Slash"
+	LessThanString         = "LessThan"
+	LessThanEqualString    = "LessThanEqual"
+	EqualString            = "Equal"
+	DoubleEqualString      = "DoubleEqual"
+	GreaterThanString      = "GreaterThan"
+	GreaterThanEqualString = "GreaterThanEqual"
+	BarString              = "Bar"
+	DoubleBarString        = "DoubleBar"
+	CommaString            = "Comma"
+	DotString              = "Dot"
+	ColonString            = "Colon"
+	QuestionString         = "Question"
+	OpenBracketString      = "OpenBracket"
+	CloseBracketString     = "CloseBracket"
+	IdentifierString       = "Identifier"
+	EndString              = "End"
+	IntegerLiteralString   = "IntegerLiteral"
+	RealLiteralString      = "RealLiteral"
+	StringLiteralString    = "StringLiteral"
+	UnknownString          = "Unknown"
+)
+
 func (t TokenType) ToString() string {
 	switch t {
 	case Exclamation:
-		return "Exclamation"
+		return ExclamationString
 	case ExclamationEqual:
-		return "ExclamationEqual"
+		return ExclamationEqualString
 	case Percent:
-		return "Percent"
+		return PercentString
 	case DoubleAmpersand:
-		return "DoubleAmpersand"
+		return DoubleAmpersandString
 	case Ampersand:
-		return "Ampersand"
+		return AmpersandString
 	case OpenParenthesis:
-		return "OpenParenthesis"
+		return OpenParenthesisString
 	case CloseParenthesis:
-		return "CloseParenthesis"
+		return CloseParenthesisString
 	case Asterisk:
-		return "Asterisk"
+		return AsteriskString
 	case Plus:
-		return "Plus"
+		return PlusString
 	case Minus:
-		return "Minus"
+		return MinusString
 	case Slash:
-		return "Slash"
+		return SlashString
 	case LessThan:
-		return "LessThan"
+		return LessThanString
 	case LessThanEqual:
-		return "LessThanEqual"
+		return LessThanEqualString
 	case Equal:
-		return "Equal"
+		return EqualString
 	case DoubleEqual:
-		return "DoubleEqual"
+		return DoubleEqualString
 	case GreaterThan:
-		return "GreaterThan"
+		return GreaterThanString
 	case GreaterThanEqual:
-		return "GreaterThanEqual"
+		return GreaterThanEqualString
 	case Bar:
-		return "Bar"
+		return BarString
 	case DoubleBar:
-		return "DoubleBar"
+		return DoubleBarString
 	case Comma:
-		return "Comma"
+		return CommaString
 	case Dot:
-		return "Dot"
+		return DotString
 	case Colon:
-		return "Colon"
+		return ColonString
 	case Question:
-		return "Question"
+		return QuestionString
 	case OpenBracket:
-		return "OpenBracket"
+		return OpenBracketString
 	case CloseBracket:
-		return "CloseBracket"
+		return CloseBracketString
 	case Identifier:
-		return "Identifier"
+		return IdentifierString
 	case End:
-		return "End"
+		return EndString
 	case IntegerLiteral:
-		return "IntegerLiteral"
+		return IntegerLiteralString
 	case RealLiteral:
-		return "RealLiteral"
+		return RealLiteralString
 	case StringLiteral:
-		return "StringLiteral"
+		return StringLiteralString
 	default:
-		return "Unknown"
+		return UnknownString
 	}
 }

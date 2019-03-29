@@ -187,8 +187,11 @@ func TestNewExpressionParser(t *testing.T) {
 		if err != nil {
 			t.Fatalf("test: %s - unexpected error while creating expression parser: %v", test.name, err)
 		}
+		tokens, err := parser.parseTokens()
+		if err != nil {
+			t.Fatalf("unexpected err: %v", err)
+		}
 
-		tokens := parser.tokens
 		if len(tokens) != len(test.expectedTokens) {
 			t.Fatalf("test: %s - expected length %d but got %d", test.name, len(test.expectedTokens), len(tokens))
 		}
