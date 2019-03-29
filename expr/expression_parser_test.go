@@ -6,10 +6,13 @@ import "testing"
 // that the corresponding tokens generated are correct.
 func TestNewExpressionParser(t *testing.T) {
 	for _, test := range []struct {
+		name           string
 		expression     string
 		expectedTokens []*Token
 	}{
-		{"1 > 0",
+		{
+			"arithmetic",
+			"1 > 0",
 			[]*Token{
 				{
 					Type: IntegerLiteral,
@@ -26,6 +29,7 @@ func TestNewExpressionParser(t *testing.T) {
 			},
 		},
 		{
+			"symbols",
 			"! != % & && ( ) * + - / < <= = == > >=",
 			[]*Token{
 				{
@@ -99,6 +103,29 @@ func TestNewExpressionParser(t *testing.T) {
 			},
 		},
 		{
+			"double assignment",
+			`double x = 1.5E5`,
+			[]*Token{
+				{
+					Type: Identifier,
+					Text: "double",
+				},
+				{
+					Type: Identifier,
+					Text: "x",
+				},
+				{
+					Type: Equal,
+					Text: "=",
+				},
+				{
+					Type: RealLiteral,
+					Text: "1.5E5",
+				},
+			},
+		},
+		{
+			"string literals",
 			`| || , . : ? [ ] new 3 4.532 'apple' "double"`,
 			[]*Token{
 				{
@@ -158,16 +185,16 @@ func TestNewExpressionParser(t *testing.T) {
 	} {
 		parser, err := NewExpressionParser(test.expression)
 		if err != nil {
-			t.Fatalf("unexpected error while creating expression parser: %v", err)
+			t.Fatalf("test: %s - unexpected error while creating expression parser: %v", test.name, err)
 		}
 
 		tokens := parser.tokens
 		if len(tokens) != len(test.expectedTokens) {
-			t.Fatalf("expected length %d but got %d", len(test.expectedTokens), len(tokens))
+			t.Fatalf("test: %s - expected length %d but got %d", test.name, len(test.expectedTokens), len(tokens))
 		}
 		for i := 0; i < len(tokens); i++ {
 			if !test.expectedTokens[i].Equals(tokens[i]) {
-				t.Fatalf("expected %v but got %v", test.expectedTokens[i], tokens[i])
+				t.Fatalf("test: %s - expected %v but got %v", test.name, test.expectedTokens[i], tokens[i])
 			}
 		}
 	}

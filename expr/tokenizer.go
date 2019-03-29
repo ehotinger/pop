@@ -190,7 +190,7 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 				t.NextChar()
 
 				if !unicode.IsDigit(t.ch) {
-					return token, fmt.Errorf("text position: %d - digit expected", t.position)
+					return token, fmt.Errorf("text position: %d - digit expected - char: %s", t.position, string(t.ch))
 				}
 
 				for {
@@ -200,7 +200,22 @@ func (t *Tokenizer) NextToken() (token *Token, err error) {
 					}
 				}
 			}
-			// TODO: support for special floating point syntax?
+			if t.ch == 'E' || t.ch == 'e' {
+				tokenType = RealLiteral
+				t.NextChar()
+				if !unicode.IsDigit(t.ch) {
+					return token, fmt.Errorf("text position: %d - digit expected - char: %s", t.position, string(t.ch))
+				}
+				for {
+					t.NextChar()
+					if !unicode.IsDigit(t.ch) {
+						break
+					}
+				}
+				if t.ch == 'F' || t.ch == 'f' {
+					t.NextChar()
+				}
+			}
 			break
 		}
 		if t.position == t.length {
