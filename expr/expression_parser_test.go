@@ -172,3 +172,88 @@ func TestNewExpressionParser(t *testing.T) {
 		}
 	}
 }
+
+func TestValidateTokens(t *testing.T) {
+	for _, test := range []struct {
+		parser   *ExpressionParser
+		expected error
+	}{
+		{
+			&ExpressionParser{
+				tokens: []*Token{
+					{
+						Type: OpenParenthesis,
+						Text: "(",
+					},
+					{
+						Type: OpenParenthesis,
+						Text: "(",
+					},
+					{
+						Type: StringLiteral,
+						Text: "foo",
+					},
+					{
+						Type: CloseParenthesis,
+						Text: ")",
+					},
+					{
+						Type: CloseParenthesis,
+						Text: ")",
+					},
+				},
+			},
+			nil,
+		},
+		{
+			&ExpressionParser{
+				tokens: []*Token{
+					{
+						Type: OpenParenthesis,
+						Text: "(",
+					},
+					{
+						Type: CloseParenthesis,
+						Text: ")",
+					},
+					{
+						Type: CloseParenthesis,
+						Text: ")",
+					},
+					{
+						Type: StringLiteral,
+						Text: "foo",
+					},
+				},
+			},
+			errInvalidParenOrder,
+		},
+		{
+			&ExpressionParser{
+				tokens: []*Token{
+					{
+						Type: OpenParenthesis,
+						Text: "(",
+					},
+					{
+						Type: OpenParenthesis,
+						Text: "(",
+					},
+					{
+						Type: StringLiteral,
+						Text: "foo",
+					},
+					{
+						Type: CloseParenthesis,
+						Text: ")",
+					},
+				},
+			},
+			errUnbalancedParen,
+		},
+	} {
+		if actual := test.parser.validateTokens(); actual != test.expected {
+			t.Fatalf("expected %v but got %v", test.expected, actual)
+		}
+	}
+}

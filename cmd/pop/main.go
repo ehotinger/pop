@@ -7,16 +7,16 @@ import (
 )
 
 func main() {
-	expression, err := expr.NewExpressionParser(`"100" > 0`)
+	parser, err := expr.NewExpressionParser(`"100" > 0`)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, token := range expression.GetTokens() {
+	for _, token := range parser.GetTokens() {
 		log.Printf("token - kind: %s, text: %s", token.Type.ToString(), token.Text)
 	}
 
-	result, err := expression.Evaluate(nil)
+	result, err := parser.Evaluate(nil)
 	if err != nil {
 		log.Fatal(err)
 	}
