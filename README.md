@@ -9,7 +9,7 @@ C# style expression parsing and evaluation in Go.
 |               Symbol                |        Operation        | Associativity |
 |-------------------------------------|-------------------------|---------------|
 | `[ ] ( ) . ++ --` (postfix)         | Expression              | Left to right |
-| `sizeof & * + - ~ ! ++ --` (prefix) | Unary                   | Right to left |
+| `& * + - ~ ! ++ --` (prefix)        | Unary                   | Right to left |
 | `* / %`                             | Multiplicative          | Left to right |
 | `+ -`                               | Additive                | Left to right |
 | `<< >>`                             | Bitwise-shift           | Left to right |
