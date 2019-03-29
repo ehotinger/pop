@@ -19,7 +19,7 @@ C# style expression parsing and evaluation in Go.
 | `^`                                 | Bitwise-XOR             | Left to right |
 | `\|`                                | Bitwise-OR              | Left to right |
 | `&&`                                | Logical-AND             | Left to right |
-| `\|\`                               | Logical-OR              | Left to right |
+| `\|\|`                               | Logical-OR              | Left to right |
 | `? :` (Ternary)                     | Conditional             | Right to left |
 
 - Operators are listed in order of higest to lowest precedence. Multiple symbols on the same line indicate equal precedence.
