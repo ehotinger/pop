@@ -29,6 +29,10 @@ func (e *ParameterExpression) Type() ExpressionType {
 	return e.self.nodeType
 }
 
+func (e *ParameterExpression) NodeType() string {
+	return "ParameterExpression"
+}
+
 func (e *ParameterExpression) ToString() string {
 	if e.name == "" {
 		return "<param>"

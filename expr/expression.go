@@ -133,6 +133,7 @@ type Expression interface {
 	ToString() string
 	Kind() reflect.Kind
 	Type() ExpressionType
+	NodeType() string
 }
 
 func IsArithmetic(t reflect.Kind) bool {

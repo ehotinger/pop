@@ -44,6 +44,10 @@ func (e *BinaryExpression) Type() ExpressionType {
 	return e.self.nodeType
 }
 
+func (e *BinaryExpression) NodeType() string {
+	return "BinaryExpression"
+}
+
 func (e *BinaryExpression) ToString() string {
 	if e == nil {
 		return "<nil>"

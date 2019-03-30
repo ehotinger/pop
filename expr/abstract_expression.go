@@ -78,3 +78,7 @@ func (e *AbstractExpression) Kind() reflect.Kind {
 func (e *AbstractExpression) Type() ExpressionType {
 	return e.nodeType
 }
+
+func (e *AbstractExpression) NodeType() string {
+	return "AbstractExpression"
+}

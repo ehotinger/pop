@@ -28,6 +28,10 @@ func (e *ConstantExpression) Type() ExpressionType {
 	return e.self.nodeType
 }
 
+func (e *ConstantExpression) NodeType() string {
+	return "ConstantExpression"
+}
+
 func (e *ConstantExpression) ToString() string {
 	if e == nil || e.value == nil {
 		return "<nil>"

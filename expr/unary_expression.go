@@ -33,6 +33,10 @@ func (e *UnaryExpression) Type() ExpressionType {
 	return e.self.nodeType
 }
 
+func (e *UnaryExpression) NodeType() string {
+	return "UnaryExpression"
+}
+
 func (e *UnaryExpression) ToString() string {
 	if e == nil {
 		return "<nil>"
