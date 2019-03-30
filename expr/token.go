@@ -15,7 +15,6 @@ type Token struct {
 	Type     TokenType
 	Text     string
 	Position int
-	// Value    interface{}
 }
 
 func (t *Token) Equals(u *Token) bool {

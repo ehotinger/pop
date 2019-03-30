@@ -40,6 +40,10 @@ func (e *BinaryExpression) Kind() reflect.Kind {
 	return e.self.kind
 }
 
+func (e *BinaryExpression) Type() ExpressionType {
+	return e.self.nodeType
+}
+
 func (e *BinaryExpression) ToString() string {
 	if e == nil {
 		return "<nil>"

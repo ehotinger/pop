@@ -24,6 +24,10 @@ func (e *ConstantExpression) Kind() reflect.Kind {
 	return e.self.kind
 }
 
+func (e *ConstantExpression) Type() ExpressionType {
+	return e.self.nodeType
+}
+
 func (e *ConstantExpression) ToString() string {
 	if e == nil || e.value == nil {
 		return "<nil>"

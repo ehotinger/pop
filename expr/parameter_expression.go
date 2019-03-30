@@ -25,6 +25,10 @@ func (e *ParameterExpression) Kind() reflect.Kind {
 	return e.self.kind
 }
 
+func (e *ParameterExpression) Type() ExpressionType {
+	return e.self.nodeType
+}
+
 func (e *ParameterExpression) ToString() string {
 	if e.name == "" {
 		return "<param>"

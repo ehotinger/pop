@@ -10,7 +10,7 @@ const (
 	AddExpr ExpressionType = iota
 	AddCheckedExpr
 	AndExpr
-	AndAlsoExpr // Short circuiting
+	AndAlsoExpr // TODO: Short circuiting
 	ConstantExpr
 	DivideExpr
 	EqualExpr
@@ -28,7 +28,7 @@ const (
 	NotExpr
 	NotEqualExpr
 	OrExpr
-	OrElseExpr // Short circuiting
+	OrElseExpr // TODO: Short circuiting
 	ParameterExpr
 	PowerExpr
 	RightShiftExpr
@@ -37,82 +37,102 @@ const (
 	UnknownExpr
 )
 
+const (
+	AddExprString                = "AddExpr"
+	AddCheckedExprString         = "AddCheckedExpr"
+	AndExprString                = "AndExpr"
+	AndAlsoExprString            = "AndAlsoExpr"
+	ConstantExprString           = "ConstantExpr"
+	DivideExprString             = "DivideExpr"
+	EqualExprString              = "EqualExpr"
+	ExclusiveOrExprString        = "ExclusiveOrExpr"
+	GreaterThanExprString        = "GreaterThanExpr"
+	GreaterThanOrEqualExprString = "GreaterThanOrEqualExpr"
+	LeftShiftExprString          = "LeftShiftExpr"
+	LessThanExprString           = "LessThanExpr"
+	LessThanOrEqualExprString    = "LessThanOrEqualExpr"
+	ModuloExprString             = "ModuloExpr"
+	MultiplyExprString           = "MultiplyExpr"
+	MultiplyCheckedExprString    = "MultiplyCheckedExpr"
+	NegateExprString             = "NegateExpr"
+	UnaryPlusExprString          = "UnaryPlusExpr"
+	NotExprString                = "NotExpr"
+	NotEqualExprString           = "NotEqualExpr"
+	OrExprString                 = "OrExpr"
+	OrElseExprString             = "OrElseExpr"
+	ParameterExprString          = "ParameterExpr"
+	PowerExprString              = "PowerExpr"
+	RightShiftExprString         = "RightShiftExpr"
+	SubtractExprString           = "SubtractExpr"
+	SubtractCheckedExprString    = "SubtractCheckedExpr"
+	UnknownExprString            = "UnknownExpr"
+)
+
+func (t ExpressionType) ToString() string {
+	switch t {
+	case AddExpr:
+		return AddExprString
+	case AddCheckedExpr:
+		return AddCheckedExprString
+	case AndExpr:
+		return AndExprString
+	case AndAlsoExpr:
+		return AndAlsoExprString
+	case ConstantExpr:
+		return ConstantExprString
+	case DivideExpr:
+		return DivideExprString
+	case EqualExpr:
+		return EqualExprString
+	case ExclusiveOrExpr:
+		return ExclusiveOrExprString
+	case GreaterThanExpr:
+		return GreaterThanExprString
+	case GreaterThanOrEqualExpr:
+		return GreaterThanOrEqualExprString
+	case LeftShiftExpr:
+		return LeftShiftExprString
+	case LessThanExpr:
+		return LessThanExprString
+	case LessThanOrEqualExpr:
+		return LessThanOrEqualExprString
+	case ModuloExpr:
+		return ModuloExprString
+	case MultiplyExpr:
+		return MultiplyExprString
+	case MultiplyCheckedExpr:
+		return MultiplyCheckedExprString
+	case NegateExpr:
+		return NegateExprString
+	case UnaryPlusExpr:
+		return UnaryPlusExprString
+	case NotExpr:
+		return NotExprString
+	case NotEqualExpr:
+		return NotEqualExprString
+	case OrExpr:
+		return OrExprString
+	case OrElseExpr:
+		return OrElseExprString
+	case ParameterExpr:
+		return ParameterExprString
+	case PowerExpr:
+		return PowerExprString
+	case RightShiftExpr:
+		return RightShiftExprString
+	case SubtractExpr:
+		return SubtractExprString
+	case SubtractCheckedExpr:
+		return SubtractCheckedExprString
+	default:
+		return UnknownExprString
+	}
+}
+
 type Expression interface {
 	ToString() string
 	Kind() reflect.Kind
-}
-
-type AbstractExpression struct {
-	nodeType ExpressionType
-	kind     reflect.Kind
-}
-
-func (e *AbstractExpression) ToString() string {
-	if e == nil {
-		return "UnknownExpr"
-	}
-	switch e.nodeType {
-	case AddExpr:
-		return "AddExpr"
-	case AddCheckedExpr:
-		return "AddCheckedExpr"
-	case AndExpr:
-		return "AndExpr"
-	case AndAlsoExpr:
-		return "AndAlsoExpr"
-	case ConstantExpr:
-		return "ConstantExpr"
-	case DivideExpr:
-		return "DivideExpr"
-	case EqualExpr:
-		return "EqualExpr"
-	case ExclusiveOrExpr:
-		return "ExclusiveOrExpr"
-	case GreaterThanExpr:
-		return "GreaterThanExpr"
-	case GreaterThanOrEqualExpr:
-		return "GreaterThanOrEqualExpr"
-	case LeftShiftExpr:
-		return "LeftShiftExpr"
-	case LessThanExpr:
-		return "LessThanExpr"
-	case LessThanOrEqualExpr:
-		return "LessThanOrEqualExpr"
-	case ModuloExpr:
-		return "ModuloExpr"
-	case MultiplyExpr:
-		return "MultiplyExpr"
-	case MultiplyCheckedExpr:
-		return "MultiplyCheckedExpr"
-	case NegateExpr:
-		return "NegateExpr"
-	case UnaryPlusExpr:
-		return "UnaryPlusExpr"
-	case NotExpr:
-		return "NotExpr"
-	case NotEqualExpr:
-		return "NotEqualExpr"
-	case OrExpr:
-		return "OrExpr"
-	case OrElseExpr:
-		return "OrElseExpr"
-	case ParameterExpr:
-		return "ParameterExpr"
-	case PowerExpr:
-		return "PowerExpr"
-	case RightShiftExpr:
-		return "RightShiftExpr"
-	case SubtractExpr:
-		return "SubtractExpr"
-	case SubtractCheckedExpr:
-		return "SubtractCheckedExpr"
-	default:
-		return "UnknownExpr"
-	}
-}
-
-func (e *AbstractExpression) Kind() reflect.Kind {
-	return e.kind
+	Type() ExpressionType
 }
 
 func IsArithmetic(t reflect.Kind) bool {

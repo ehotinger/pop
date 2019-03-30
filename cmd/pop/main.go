@@ -16,7 +16,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(expr.ToString())
+	log.Println("Type:", expr.Type().ToString(), "--", expr.ToString())
 
 	// for _, token := range parser.GetTokens() {
 	// 	log.Printf("token - kind: %s, text: %s", token.Type.ToString(), token.Text)

@@ -29,6 +29,10 @@ func (e *UnaryExpression) Kind() reflect.Kind {
 	return e.self.kind
 }
 
+func (e *UnaryExpression) Type() ExpressionType {
+	return e.self.nodeType
+}
+
 func (e *UnaryExpression) ToString() string {
 	if e == nil {
 		return "<nil>"
