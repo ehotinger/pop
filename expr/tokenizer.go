@@ -3,6 +3,8 @@ package expr
 import (
 	"errors"
 	"fmt"
+	"reflect"
+	"strconv"
 	"unicode"
 )
 
@@ -247,16 +249,15 @@ func (t *Tokenizer) HasNext() bool {
 	return t.position < t.length
 }
 
-func (t *Tokenizer) Parse() (*AbstractExpression, error) {
-	err := t.NextToken()
-	if err != nil {
+func (t *Tokenizer) Parse() (Expression, error) {
+	if err := t.NextToken(); err != nil {
 		return nil, err
 	}
 	return t.ParseExpression()
 }
 
 // ? : ternary operator
-func (t *Tokenizer) ParseExpression() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseExpression() (Expression, error) {
 	var err error
 	expr, err := t.ParseLogicalOr()
 	if err != nil {
@@ -264,8 +265,10 @@ func (t *Tokenizer) ParseExpression() (*AbstractExpression, error) {
 	}
 	errPos := t.token.Position
 	if t.token.Type == Question {
-		t.NextToken()
-		var expr1 *AbstractExpression
+		if err = t.NextToken(); err != nil {
+			return nil, err
+		}
+		var expr1 Expression
 		expr1, err = t.ParseExpression()
 		if err != nil {
 			return nil, err
@@ -273,8 +276,10 @@ func (t *Tokenizer) ParseExpression() (*AbstractExpression, error) {
 		if t.token.Type != Colon {
 			return nil, errors.New("expected colon")
 		}
-		t.NextToken()
-		var expr2 *AbstractExpression
+		if err = t.NextToken(); err != nil {
+			return nil, err
+		}
+		var expr2 Expression
 		expr2, err = t.ParseExpression()
 		if err != nil {
 			return nil, err
@@ -286,13 +291,15 @@ func (t *Tokenizer) ParseExpression() (*AbstractExpression, error) {
 }
 
 // ||, or
-func (t *Tokenizer) ParseLogicalOr() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseLogicalOr() (Expression, error) {
 	left, err := t.ParseLogicalAnd()
 	if err != nil {
 		return left, err
 	}
 	for t.token.Type == DoubleBar || t.token.IsIdentifierWithName(orIdentifier) {
-		t.NextToken()
+		if err := t.NextToken(); err != nil {
+			return nil, err
+		}
 		right, err := t.ParseLogicalAnd()
 		if err != nil {
 			return right, err
@@ -303,14 +310,16 @@ func (t *Tokenizer) ParseLogicalOr() (*AbstractExpression, error) {
 }
 
 // &&, and
-func (t *Tokenizer) ParseLogicalAnd() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseLogicalAnd() (Expression, error) {
 	left, err := t.ParseComparison()
 	if err != nil {
 		return nil, err
 	}
 	for t.token.Type == DoubleAmpersand || t.token.IsIdentifierWithName(andIdentifier) {
-		t.NextToken()
-		var right *AbstractExpression
+		if err = t.NextToken(); err != nil {
+			return nil, err
+		}
+		var right Expression
 		right, err = t.ParseComparison()
 		if err != nil {
 			return right, err
@@ -321,7 +330,7 @@ func (t *Tokenizer) ParseLogicalAnd() (*AbstractExpression, error) {
 }
 
 // =, ==, !=, >, >=, <, <= operators
-func (t *Tokenizer) ParseComparison() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseComparison() (Expression, error) {
 	left, err := t.ParseAdditive()
 	if err != nil {
 		return left, err
@@ -334,14 +343,16 @@ func (t *Tokenizer) ParseComparison() (*AbstractExpression, error) {
 		t.token.Type == LessThan ||
 		t.token.Type == LessThanEqual {
 		// TODO
-		t.NextToken()
+		if err = t.NextToken(); err != nil {
+			return nil, err
+		}
 	}
 
 	return left, err
 }
 
 // +, -, &
-func (t *Tokenizer) ParseAdditive() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseAdditive() (Expression, error) {
 	left, err := t.ParseMultiplicative()
 	if err != nil {
 		return left, err
@@ -350,14 +361,16 @@ func (t *Tokenizer) ParseAdditive() (*AbstractExpression, error) {
 		t.token.Type == Minus ||
 		t.token.Type == Ampersand {
 		// TODO
-		t.NextToken()
+		if err = t.NextToken(); err != nil {
+			return nil, err
+		}
 	}
 
 	return left, err
 }
 
 // *, /, %
-func (t *Tokenizer) ParseMultiplicative() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseMultiplicative() (Expression, error) {
 	left, err := t.ParseUnary()
 	if err != nil {
 		return left, err
@@ -366,13 +379,15 @@ func (t *Tokenizer) ParseMultiplicative() (*AbstractExpression, error) {
 		t.token.Type == Slash ||
 		t.token.Type == Percent {
 		// TODO
-		t.NextToken()
+		if err = t.NextToken(); err != nil {
+			return nil, err
+		}
 	}
 	return left, err
 }
 
 // -, !
-func (t *Tokenizer) ParseUnary() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseUnary() (Expression, error) {
 	// if t.token.Type == Minus || t.token.Type == Exclamation {
 	// 	// TODO
 	// }
@@ -380,7 +395,7 @@ func (t *Tokenizer) ParseUnary() (*AbstractExpression, error) {
 	return t.ParsePrimary()
 }
 
-func (t *Tokenizer) ParsePrimary() (*AbstractExpression, error) {
+func (t *Tokenizer) ParsePrimary() (Expression, error) {
 	expr, err := t.ParsePrimaryStart()
 	if err != nil {
 		return expr, err
@@ -389,7 +404,7 @@ func (t *Tokenizer) ParsePrimary() (*AbstractExpression, error) {
 	return expr, nil
 }
 
-func (t *Tokenizer) ParsePrimaryStart() (*AbstractExpression, error) {
+func (t *Tokenizer) ParsePrimaryStart() (Expression, error) {
 	switch t.token.Type {
 	case Identifier:
 		return t.ParseIdentifier()
@@ -407,39 +422,56 @@ func (t *Tokenizer) ParsePrimaryStart() (*AbstractExpression, error) {
 	return nil, errors.New("expression expected")
 }
 
-func (t *Tokenizer) ParseIdentifier() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseIdentifier() (Expression, error) {
 	if t.token.Type != Identifier {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", Identifier.ToString(), t.token.Type.ToString())
 	}
 	return nil, nil
 }
 
-func (t *Tokenizer) ParseStringLiteral() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseStringLiteral() (Expression, error) {
 	if t.token.Type != StringLiteral {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", StringLiteral.ToString(), t.token.Type.ToString())
 	}
 	return nil, nil
 }
 
-func (t *Tokenizer) ParseIntegerLiteral() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseIntegerLiteral() (Expression, error) {
 	if t.token.Type != IntegerLiteral {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", IntegerLiteral.ToString(), t.token.Type.ToString())
 	}
-	return nil, nil
+	txt := t.token.Text
+	var value interface{}
+	var err error
+	if txt[0] != '-' {
+		// TODO: support parsing as 32, 16, etc.
+		value, err = strconv.ParseUint(txt, 10, 64)
+	} else {
+		value, err = strconv.ParseInt(txt, 10, 64)
+	}
+	if err != nil {
+		return nil, err
+	}
+	if err := t.NextToken(); err != nil {
+		return nil, err
+	}
+	return CreateLiteral(value, txt), nil
 }
 
-func (t *Tokenizer) ParseRealLiteral() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseRealLiteral() (Expression, error) {
 	if t.token.Type != RealLiteral {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", RealLiteral.ToString(), t.token.Type.ToString())
 	}
 	return nil, nil
 }
 
-func (t *Tokenizer) ParseParenthesesExpression() (*AbstractExpression, error) {
+func (t *Tokenizer) ParseParenthesesExpression() (Expression, error) {
 	if t.token.Type != OpenParenthesis {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", OpenParenthesis.ToString(), t.token.Type.ToString())
 	}
-	t.NextToken()
+	if err := t.NextToken(); err != nil {
+		return nil, err
+	}
 	expr, err := t.ParseExpression()
 	if err != nil {
 		return expr, err
@@ -447,14 +479,20 @@ func (t *Tokenizer) ParseParenthesesExpression() (*AbstractExpression, error) {
 	if t.token.Type != CloseParenthesis {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", CloseParenthesis.ToString(), t.token.Type.ToString())
 	}
-	t.NextToken()
+	if err := t.NextToken(); err != nil {
+		return nil, err
+	}
 	return expr, nil
 }
 
 func (t *Tokenizer) GenerateConditional(
-	expr *AbstractExpression,
-	expr1 *AbstractExpression,
-	expr2 *AbstractExpression,
-	errorPos int) (*AbstractExpression, error) {
+	expr Expression,
+	expr1 Expression,
+	expr2 Expression,
+	errorPos int) (Expression, error) {
 	return nil, errors.New("unimplemented")
+}
+
+func CreateLiteral(value interface{}, text string) Expression {
+	return NewConstantExpression(value, reflect.TypeOf(value).Kind())
 }

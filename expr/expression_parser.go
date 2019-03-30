@@ -63,6 +63,6 @@ func (ep *ExpressionParser) Evaluate(parameters map[string]interface{}) (interfa
 	return nil, nil
 }
 
-func (ep *ExpressionParser) ParseExpression() (*AbstractExpression, error) {
+func (ep *ExpressionParser) ParseExpression() (Expression, error) {
 	return ep.tokenizer.Parse()
 }
