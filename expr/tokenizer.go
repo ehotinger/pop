@@ -371,23 +371,40 @@ func (t *Tokenizer) ParseComparison() (Expression, error) {
 		case LessThanEqual:
 			left, err = CreateLessThanOrEqual(left, right)
 		}
+
+		if err != nil {
+			return left, err
+		}
 	}
 
 	return left, err
 }
 
-// +, -, &
+// +, -
 func (t *Tokenizer) ParseAdditive() (Expression, error) {
 	left, err := t.ParseMultiplicative()
 	if err != nil {
 		return left, err
 	}
 	for t.token.Type == Plus ||
-		t.token.Type == Minus ||
-		t.token.Type == Ampersand {
-		// TODO
+		t.token.Type == Minus {
+		operator := t.token
 		if err = t.NextToken(); err != nil {
 			return nil, err
+		}
+		var right Expression
+		right, err = t.ParseMultiplicative()
+		if err != nil {
+			return nil, err
+		}
+		switch operator.Type {
+		case Plus:
+			left, err = CreateAdd(left, right)
+		case Minus:
+			left, err = CreateSubtract(left, right)
+		}
+		if err != nil {
+			return left, err
 		}
 	}
 

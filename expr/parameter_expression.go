@@ -11,7 +11,7 @@ func NewParameterExpression(name string, kind reflect.Kind) *ParameterExpression
 	return &ParameterExpression{
 		self: &AbstractExpression{
 			nodeType: ParameterExpr,
-			Kind:     kind,
+			kind:     kind,
 		},
 		name: name,
 	}
@@ -19,6 +19,10 @@ func NewParameterExpression(name string, kind reflect.Kind) *ParameterExpression
 
 func (e *ParameterExpression) Name() string {
 	return e.name
+}
+
+func (e *ParameterExpression) Kind() reflect.Kind {
+	return e.self.kind
 }
 
 func (e *ParameterExpression) ToString() string {

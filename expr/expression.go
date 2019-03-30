@@ -39,11 +39,12 @@ const (
 
 type Expression interface {
 	ToString() string
+	Kind() reflect.Kind
 }
 
 type AbstractExpression struct {
 	nodeType ExpressionType
-	Kind     reflect.Kind
+	kind     reflect.Kind
 }
 
 func (e *AbstractExpression) ToString() string {
@@ -108,6 +109,10 @@ func (e *AbstractExpression) ToString() string {
 	}
 }
 
+func (e *AbstractExpression) Kind() reflect.Kind {
+	return e.kind
+}
+
 func Add(left *AbstractExpression, right *AbstractExpression) (*BinaryExpression, error) {
 	if left == nil {
 		return nil, errors.New("left is nil")
@@ -115,8 +120,8 @@ func Add(left *AbstractExpression, right *AbstractExpression) (*BinaryExpression
 	if right == nil {
 		return nil, errors.New("right is nil")
 	}
-	if left.Kind == right.Kind && IsArithmetic(left.Kind) {
-		return NewBinaryExpression(AddExpr, left, right, left.Kind), nil
+	if left.Kind() == right.Kind() && IsArithmetic(left.Kind()) {
+		return NewBinaryExpression(AddExpr, left, right, left.Kind()), nil
 	}
 	return nil, errors.New("invalid expression")
 }

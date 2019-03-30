@@ -23,7 +23,7 @@ func NewBinaryExpression(nodeType ExpressionType, left Expression, right Express
 		right: right,
 		self: &AbstractExpression{
 			nodeType: nodeType,
-			Kind:     kind,
+			kind:     kind,
 		},
 	}
 }
@@ -34,6 +34,10 @@ func (e *BinaryExpression) Left() Expression {
 
 func (e *BinaryExpression) Right() Expression {
 	return e.right
+}
+
+func (e *BinaryExpression) Kind() reflect.Kind {
+	return e.self.kind
 }
 
 func (e *BinaryExpression) ToString() string {
@@ -70,14 +74,14 @@ func (e *BinaryExpression) GetOperator() string {
 	case PowerExpr:
 		return "^"
 	case AndExpr:
-		if e.self.Kind != reflect.Bool {
+		if e.self.Kind() != reflect.Bool {
 			return "&"
 		}
 		return andIdentifier
 	case AndAlsoExpr:
 		return "&&"
 	case OrExpr:
-		if e.self.Kind != reflect.Bool {
+		if e.self.Kind() != reflect.Bool {
 			return "|"
 		}
 		return orIdentifier
@@ -144,6 +148,20 @@ func CreateLessThanOrEqual(left Expression, right Expression) (Expression, error
 		return nil, err
 	}
 	return NewBinaryExpression(LessThanOrEqualExpr, left, right, reflect.Bool), nil
+}
+
+func CreateAdd(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(AddExpr, left, right, left.Kind()), nil
+}
+
+func CreateSubtract(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(SubtractExpr, left, right, left.Kind()), nil
 }
 
 func validateLeftAndRight(left Expression, right Expression) error {

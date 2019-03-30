@@ -22,7 +22,7 @@ func TestToString(t *testing.T) {
 			&ConstantExpression{
 				self: &AbstractExpression{
 					nodeType: ConstantExpr,
-					Kind:     reflect.String,
+					kind:     reflect.String,
 				},
 				value: "HelloWorld!",
 			},
@@ -32,7 +32,7 @@ func TestToString(t *testing.T) {
 			&ConstantExpression{
 				self: &AbstractExpression{
 					nodeType: ConstantExpr,
-					Kind:     reflect.Int32,
+					kind:     reflect.Int32,
 				},
 				value: int32(300),
 			},
@@ -42,7 +42,7 @@ func TestToString(t *testing.T) {
 			&ConstantExpression{
 				self: &AbstractExpression{
 					nodeType: ConstantExpr,
-					Kind:     reflect.Int32,
+					kind:     reflect.Int32,
 				},
 				value: int64(300),
 			},
