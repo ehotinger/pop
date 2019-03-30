@@ -450,9 +450,29 @@ func (t *Tokenizer) ParseMultiplicative() (Expression, error) {
 
 // -, !
 func (t *Tokenizer) ParseUnary() (Expression, error) {
-	// if t.token.Type == Minus || t.token.Type == Exclamation {
-	// 	// TODO
-	// }
+	if t.token.Type == Minus || t.token.Type == Exclamation {
+		operator := t.token
+		if err := t.NextToken(); err != nil {
+			return nil, err
+		}
+		if operator.Type == Minus &&
+			(t.token.Type == IntegerLiteral || t.token.Type == RealLiteral) {
+			t.token.Text = "-" + t.token.Text
+			t.token.Position = operator.Position
+			return t.ParsePrimary()
+		}
+		expr, err := t.ParseUnary()
+		if err != nil {
+			return expr, err
+		}
+		// TODO: Promote
+		if operator.Type == Minus {
+			expr, err = CreateNegate(expr)
+		} else {
+			expr, err = CreateNot(expr)
+		}
+		return expr, err
+	}
 
 	return t.ParsePrimary()
 }

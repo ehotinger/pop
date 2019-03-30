@@ -25,6 +25,7 @@ const (
 	MultiplyExpr
 	MultiplyCheckedExpr
 	NegateExpr
+	UnaryPlusExpr // TODO: support this?
 	NotExpr
 	NotEqualExpr
 	OrExpr
@@ -86,6 +87,8 @@ func (e *AbstractExpression) ToString() string {
 		return "MultiplyCheckedExpr"
 	case NegateExpr:
 		return "NegateExpr"
+	case UnaryPlusExpr:
+		return "UnaryPlusExpr"
 	case NotExpr:
 		return "NotExpr"
 	case NotEqualExpr:
