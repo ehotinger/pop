@@ -34,6 +34,7 @@ const (
 	RightShiftExpr
 	SubtractExpr
 	SubtractCheckedExpr
+	UnknownExpr
 )
 
 type Expression interface {

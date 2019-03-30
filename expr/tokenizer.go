@@ -274,7 +274,7 @@ func (t *Tokenizer) ParseExpression() (Expression, error) {
 			return nil, err
 		}
 		if t.token.Type != Colon {
-			return nil, errors.New("expected colon")
+			return nil, fmt.Errorf("expected colon, got %v", t.token.Type.ToString())
 		}
 		if err = t.NextToken(); err != nil {
 			return nil, err

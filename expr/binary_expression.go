@@ -37,6 +37,9 @@ func (e *BinaryExpression) Right() Expression {
 }
 
 func (e *BinaryExpression) ToString() string {
+	if e == nil {
+		return "<nil>"
+	}
 	operator := e.GetOperator()
 	if operator == "" {
 		return fmt.Sprintf("%s (%s, %s)", e.self.ToString(), e.left.ToString(), e.right.ToString())
@@ -67,11 +70,17 @@ func (e *BinaryExpression) GetOperator() string {
 	case PowerExpr:
 		return "^"
 	case AndExpr:
-		return "&" // TODO
+		if e.self.Kind != reflect.Bool {
+			return "&"
+		}
+		return andIdentifier
 	case AndAlsoExpr:
 		return "&&"
 	case OrExpr:
-		return "|" // TODO
+		if e.self.Kind != reflect.Bool {
+			return "|"
+		}
+		return orIdentifier
 	case OrElseExpr:
 		return "||"
 	case LessThanExpr:
