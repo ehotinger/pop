@@ -6,12 +6,12 @@ import (
 )
 
 type BinaryExpression struct {
-	left  *AbstractExpression
-	right *AbstractExpression
+	left  Expression
+	right Expression
 	self  *AbstractExpression
 }
 
-func NewBinaryExpression(nodeType ExpressionType, left *AbstractExpression, right *AbstractExpression, kind reflect.Kind) *BinaryExpression {
+func NewBinaryExpression(nodeType ExpressionType, left Expression, right Expression, kind reflect.Kind) *BinaryExpression {
 	return &BinaryExpression{
 		left:  left,
 		right: right,
@@ -22,11 +22,11 @@ func NewBinaryExpression(nodeType ExpressionType, left *AbstractExpression, righ
 	}
 }
 
-func (e *BinaryExpression) Left() *AbstractExpression {
+func (e *BinaryExpression) Left() Expression {
 	return e.left
 }
 
-func (e *BinaryExpression) Right() *AbstractExpression {
+func (e *BinaryExpression) Right() Expression {
 	return e.right
 }
 
