@@ -7,6 +7,7 @@ import (
 const (
 	orIdentifier  = "or"
 	andIdentifier = "and"
+	modIdentifier = "mod"
 )
 
 // Token represents a single parsed token.

@@ -419,10 +419,30 @@ func (t *Tokenizer) ParseMultiplicative() (Expression, error) {
 	}
 	for t.token.Type == Asterisk ||
 		t.token.Type == Slash ||
-		t.token.Type == Percent {
-		// TODO
+		t.token.Type == Percent ||
+		t.token.IsIdentifierWithName(modIdentifier) {
+		operator := t.token
 		if err = t.NextToken(); err != nil {
 			return nil, err
+		}
+		var right Expression
+		right, err = t.ParseUnary()
+		if err != nil {
+			return left, err
+		}
+		// TODO: Promote
+		switch operator.Type {
+		case Asterisk:
+			left, err = CreateMultiply(left, right)
+		case Slash:
+			left, err = CreateDivide(left, right)
+		case Percent:
+			fallthrough
+		case Identifier:
+			left, err = CreateModulus(left, right)
+		}
+		if err != nil {
+			return left, err
 		}
 	}
 	return left, err

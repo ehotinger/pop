@@ -164,6 +164,27 @@ func CreateSubtract(left Expression, right Expression) (Expression, error) {
 	return NewBinaryExpression(SubtractExpr, left, right, left.Kind()), nil
 }
 
+func CreateMultiply(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(MultiplyExpr, left, right, left.Kind()), nil
+}
+
+func CreateDivide(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(DivideExpr, left, right, left.Kind()), nil
+}
+
+func CreateModulus(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(ModuloExpr, left, right, left.Kind()), nil
+}
+
 func validateLeftAndRight(left Expression, right Expression) error {
 	if left == nil {
 		return errLeftNil
