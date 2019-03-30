@@ -9,7 +9,9 @@ import (
 )
 
 var (
-	errMissingExpression = errors.New("expression is required")
+	errMissingExpression     = errors.New("expression is required")
+	errMiscomputedExpression = errors.New("unable to create expression")
+	errUnimplemented         = errors.New("unimplemented")
 )
 
 type Tokenizer struct {
@@ -376,7 +378,6 @@ func (t *Tokenizer) ParseComparison() (Expression, error) {
 			return left, err
 		}
 	}
-
 	return left, err
 }
 
@@ -407,11 +408,10 @@ func (t *Tokenizer) ParseAdditive() (Expression, error) {
 			return left, err
 		}
 	}
-
 	return left, err
 }
 
-// *, /, %
+// *, /, %, mod
 func (t *Tokenizer) ParseMultiplicative() (Expression, error) {
 	left, err := t.ParseUnary()
 	if err != nil {
@@ -478,15 +478,6 @@ func (t *Tokenizer) ParseUnary() (Expression, error) {
 }
 
 func (t *Tokenizer) ParsePrimary() (Expression, error) {
-	expr, err := t.ParsePrimaryStart()
-	if err != nil {
-		return expr, err
-	}
-	// TODO
-	return expr, nil
-}
-
-func (t *Tokenizer) ParsePrimaryStart() (Expression, error) {
 	switch t.token.Type {
 	case Identifier:
 		return t.ParseIdentifier()
@@ -501,13 +492,14 @@ func (t *Tokenizer) ParsePrimaryStart() (Expression, error) {
 	default:
 		break
 	}
-	return nil, errors.New("expression expected")
+	return nil, errMiscomputedExpression
 }
 
 func (t *Tokenizer) ParseIdentifier() (Expression, error) {
 	if t.token.Type != Identifier {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", Identifier.ToString(), t.token.Type.ToString())
 	}
+	// TODO: impl
 	return nil, nil
 }
 
@@ -515,6 +507,7 @@ func (t *Tokenizer) ParseStringLiteral() (Expression, error) {
 	if t.token.Type != StringLiteral {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", StringLiteral.ToString(), t.token.Type.ToString())
 	}
+	// TODO: impl
 	return nil, nil
 }
 
@@ -544,7 +537,22 @@ func (t *Tokenizer) ParseRealLiteral() (Expression, error) {
 	if t.token.Type != RealLiteral {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", RealLiteral.ToString(), t.token.Type.ToString())
 	}
-	return nil, nil
+	var value interface{}
+	text := t.token.Text
+	f, err := strconv.ParseFloat(text, 64)
+	if err != nil {
+		return nil, err
+	}
+	value = f
+
+	if value == nil {
+		return nil, errors.New("failed to parse real literal")
+	}
+	if err := t.NextToken(); err != nil {
+		return nil, err
+	}
+
+	return CreateLiteral(value, text), nil
 }
 
 func (t *Tokenizer) ParseParenthesesExpression() (Expression, error) {
@@ -572,7 +580,8 @@ func (t *Tokenizer) GenerateConditional(
 	expr1 Expression,
 	expr2 Expression,
 	errorPos int) (Expression, error) {
-	return nil, errors.New("unimplemented")
+	// TODO: impl
+	return nil, errUnimplemented
 }
 
 func CreateLiteral(value interface{}, text string) Expression {
