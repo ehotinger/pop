@@ -1,7 +1,6 @@
 package expr
 
 import (
-	"errors"
 	"reflect"
 )
 
@@ -114,19 +113,6 @@ func (e *AbstractExpression) ToString() string {
 
 func (e *AbstractExpression) Kind() reflect.Kind {
 	return e.kind
-}
-
-func Add(left *AbstractExpression, right *AbstractExpression) (*BinaryExpression, error) {
-	if left == nil {
-		return nil, errors.New("left is nil")
-	}
-	if right == nil {
-		return nil, errors.New("right is nil")
-	}
-	if left.Kind() == right.Kind() && IsArithmetic(left.Kind()) {
-		return NewBinaryExpression(AddExpr, left, right, left.Kind()), nil
-	}
-	return nil, errors.New("invalid expression")
 }
 
 func IsArithmetic(t reflect.Kind) bool {

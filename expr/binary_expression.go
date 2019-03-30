@@ -154,7 +154,10 @@ func CreateAdd(left Expression, right Expression) (Expression, error) {
 	if err := validateLeftAndRight(left, right); err != nil {
 		return nil, err
 	}
-	return NewBinaryExpression(AddExpr, left, right, left.Kind()), nil
+	if left.Kind() == right.Kind() && IsArithmetic(left.Kind()) {
+		return NewBinaryExpression(AddExpr, left, right, left.Kind()), nil
+	}
+	return nil, errors.New("invalid expression")
 }
 
 func CreateSubtract(left Expression, right Expression) (Expression, error) {
