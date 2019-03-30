@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 	"unicode"
 )
 
@@ -507,8 +508,12 @@ func (t *Tokenizer) ParseStringLiteral() (Expression, error) {
 	if t.token.Type != StringLiteral {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", StringLiteral.ToString(), t.token.Type.ToString())
 	}
-	// TODO: impl
-	return nil, nil
+	s := strings.Trim(t.token.Text, "'")
+	s = strings.Trim(s, `"`)
+	if err := t.NextToken(); err != nil {
+		return nil, err
+	}
+	return CreateLiteral(s, s), nil
 }
 
 func (t *Tokenizer) ParseIntegerLiteral() (Expression, error) {
