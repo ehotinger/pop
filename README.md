@@ -23,3 +23,25 @@ C# style expression parsing and evaluation in Go.
 | `? :` (Ternary)                     | Conditional             | Right to left |
 
 - Operators are listed in order of highest to lowest precedence. Multiple symbols on the same line indicate equal precedence.
+
+## Expressions
+
+The following are not supported and are considered out of scope:
+
+- Blocks (sequences of expressions where variables can be defined)
+- Indexing (properties and arrays)
+- Labels and Goto
+- Lambda
+- Loops
+- Members (accessing a field or property)
+- Constructors (instantiating a new object)
+- Switches
+- Try/Catch
+
+That leaves these as starters:
+
+- Binary
+- Unary
+- Conditional (ternary)
+- Default (default value of a type)
+- Parameter
