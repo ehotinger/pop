@@ -353,25 +353,24 @@ func (t *Tokenizer) ParseComparison() (Expression, error) {
 		if err != nil {
 			return nil, err
 		}
-		// TODO: validation of left and right types
 
+		// TODO: validation of left and right types
 		switch operator.Type {
 		case Equal:
 			fallthrough
 		case DoubleEqual:
-			break
+			left, err = CreateEqual(left, right)
 		case ExclamationEqual:
-			break
+			left, err = CreateNotEqual(left, right)
 		case GreaterThan:
-			left, err = GenerateGreaterThan(left, right)
+			left, err = CreateGreaterThan(left, right)
 		case GreaterThanEqual:
-			break
+			left, err = CreateGreaterThanOrEqual(left, right)
 		case LessThan:
-			break
+			left, err = CreateLessThan(left, right)
 		case LessThanEqual:
-			break
+			left, err = CreateLessThanOrEqual(left, right)
 		}
-
 	}
 
 	return left, err
@@ -521,14 +520,4 @@ func (t *Tokenizer) GenerateConditional(
 
 func CreateLiteral(value interface{}, text string) Expression {
 	return NewConstantExpression(value, reflect.TypeOf(value).Kind())
-}
-
-func GenerateGreaterThan(left Expression, right Expression) (Expression, error) {
-	if left == nil {
-		return nil, errors.New("left cannot be nil")
-	}
-	if right == nil {
-		return nil, errors.New("right cannot be nil")
-	}
-	return NewBinaryExpression(GreaterThanExpr, left, right, reflect.Bool), nil
 }

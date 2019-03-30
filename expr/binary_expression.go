@@ -1,8 +1,14 @@
 package expr
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
+)
+
+var (
+	errLeftNil  = errors.New("left cannot be nil")
+	errRightNil = errors.New("right cannot be nil")
 )
 
 type BinaryExpression struct {
@@ -87,4 +93,56 @@ func (e *BinaryExpression) GetOperator() string {
 	default:
 		return ""
 	}
+}
+
+func CreateEqual(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(EqualExpr, left, right, reflect.Bool), nil
+}
+
+func CreateNotEqual(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(NotEqualExpr, left, right, reflect.Bool), nil
+}
+
+func CreateGreaterThan(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(GreaterThanExpr, left, right, reflect.Bool), nil
+}
+
+func CreateGreaterThanOrEqual(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(GreaterThanOrEqualExpr, left, right, reflect.Bool), nil
+}
+
+func CreateLessThan(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(LessThanExpr, left, right, reflect.Bool), nil
+}
+
+func CreateLessThanOrEqual(left Expression, right Expression) (Expression, error) {
+	if err := validateLeftAndRight(left, right); err != nil {
+		return nil, err
+	}
+	return NewBinaryExpression(LessThanOrEqualExpr, left, right, reflect.Bool), nil
+}
+
+func validateLeftAndRight(left Expression, right Expression) error {
+	if left == nil {
+		return errLeftNil
+	}
+	if right == nil {
+		return errRightNil
+	}
+	return nil
 }
