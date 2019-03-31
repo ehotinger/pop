@@ -7,16 +7,24 @@ import (
 )
 
 func main() {
-	parser, err := expr.NewExpressionParser(`100 > 0`)
+	parser, err := expr.NewExpressionParser(`1 + 5`)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	expr, err := parser.ParseExpression()
+	expression, err := parser.ParseExpression()
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("NodeType:", expr.NodeType(), "Type:", expr.Type().ToString(), "--", expr.ToString())
+	log.Println("NodeType:", expression.NodeType(), "Type:", expression.Type().ToString(), "--", expression.ToString())
+
+	visitor, err := expr.CreateVisitorFromExpression(expression)
+	if err != nil {
+		log.Fatalf("failed to create visitor: %v", err)
+	}
+	if err := visitor.Visit(); err != nil {
+		log.Fatalf("failed traversal: %v", err)
+	}
 
 	// for _, token := range parser.GetTokens() {
 	// 	log.Printf("token - kind: %s, text: %s", token.Type.ToString(), token.Text)
