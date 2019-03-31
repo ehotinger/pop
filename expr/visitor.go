@@ -21,5 +21,5 @@ func CreateVisitorFromExpression(node Expression) (Visitor, error) {
 		return NewBinaryVisitor(node.(*BinaryExpression)), nil
 	}
 
-	return nil, fmt.Errorf("unable to create visitor for %v", node.Type().ToString())
+	return nil, fmt.Errorf("unable to create visitor for %v", node.Type())
 }

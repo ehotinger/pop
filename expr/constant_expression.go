@@ -32,7 +32,7 @@ func (e *ConstantExpression) NodeType() string {
 	return "ConstantExpression"
 }
 
-func (e *ConstantExpression) ToString() string {
+func (e *ConstantExpression) String() string {
 	if e == nil || e.value == nil {
 		return "<nil>"
 	}

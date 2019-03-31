@@ -68,7 +68,7 @@ const (
 	UnknownExprString            = "UnknownExpr"
 )
 
-func (t ExpressionType) ToString() string {
+func (t ExpressionType) String() string {
 	switch t {
 	case AddExpr:
 		return AddExprString
@@ -130,7 +130,7 @@ func (t ExpressionType) ToString() string {
 }
 
 type Expression interface {
-	ToString() string
+	String() string
 	Kind() reflect.Kind
 	Type() ExpressionType
 	NodeType() string

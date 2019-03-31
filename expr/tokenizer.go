@@ -277,7 +277,7 @@ func (t *Tokenizer) ParseExpression() (Expression, error) {
 			return nil, err
 		}
 		if t.token.Type != Colon {
-			return nil, fmt.Errorf("expected colon, got %v", t.token.Type.ToString())
+			return nil, fmt.Errorf("expected colon, got %v", t.token.Type)
 		}
 		if err = t.NextToken(); err != nil {
 			return nil, err
@@ -498,7 +498,7 @@ func (t *Tokenizer) ParsePrimary() (Expression, error) {
 
 func (t *Tokenizer) ParseIdentifier() (Expression, error) {
 	if t.token.Type != Identifier {
-		return nil, fmt.Errorf("expected %v as the token type but got %v", Identifier.ToString(), t.token.Type.ToString())
+		return nil, fmt.Errorf("expected %v as the token type but got %v", Identifier, t.token.Type)
 	}
 	// TODO: impl
 	return nil, nil
@@ -506,7 +506,7 @@ func (t *Tokenizer) ParseIdentifier() (Expression, error) {
 
 func (t *Tokenizer) ParseStringLiteral() (Expression, error) {
 	if t.token.Type != StringLiteral {
-		return nil, fmt.Errorf("expected %v as the token type but got %v", StringLiteral.ToString(), t.token.Type.ToString())
+		return nil, fmt.Errorf("expected %v as the token type but got %v", StringLiteral, t.token.Type)
 	}
 	s := strings.Trim(t.token.Text, "'")
 	s = strings.Trim(s, `"`)
@@ -518,7 +518,7 @@ func (t *Tokenizer) ParseStringLiteral() (Expression, error) {
 
 func (t *Tokenizer) ParseIntegerLiteral() (Expression, error) {
 	if t.token.Type != IntegerLiteral {
-		return nil, fmt.Errorf("expected %v as the token type but got %v", IntegerLiteral.ToString(), t.token.Type.ToString())
+		return nil, fmt.Errorf("expected %v as the token type but got %v", IntegerLiteral, t.token.Type)
 	}
 	txt := t.token.Text
 	var value interface{}
@@ -540,7 +540,7 @@ func (t *Tokenizer) ParseIntegerLiteral() (Expression, error) {
 
 func (t *Tokenizer) ParseRealLiteral() (Expression, error) {
 	if t.token.Type != RealLiteral {
-		return nil, fmt.Errorf("expected %v as the token type but got %v", RealLiteral.ToString(), t.token.Type.ToString())
+		return nil, fmt.Errorf("expected %v as the token type but got %v", RealLiteral, t.token.Type)
 	}
 	var value interface{}
 	text := t.token.Text
@@ -562,7 +562,7 @@ func (t *Tokenizer) ParseRealLiteral() (Expression, error) {
 
 func (t *Tokenizer) ParseParenthesesExpression() (Expression, error) {
 	if t.token.Type != OpenParenthesis {
-		return nil, fmt.Errorf("expected %v as the token type but got %v", OpenParenthesis.ToString(), t.token.Type.ToString())
+		return nil, fmt.Errorf("expected %v as the token type but got %v", OpenParenthesis, t.token.Type)
 	}
 	if err := t.NextToken(); err != nil {
 		return nil, err
@@ -572,7 +572,7 @@ func (t *Tokenizer) ParseParenthesesExpression() (Expression, error) {
 		return expr, err
 	}
 	if t.token.Type != CloseParenthesis {
-		return nil, fmt.Errorf("expected %v as the token type but got %v", CloseParenthesis.ToString(), t.token.Type.ToString())
+		return nil, fmt.Errorf("expected %v as the token type but got %v", CloseParenthesis, t.token.Type)
 	}
 	if err := t.NextToken(); err != nil {
 		return nil, err

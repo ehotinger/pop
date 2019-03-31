@@ -16,7 +16,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("NodeType:", expression.NodeType(), "Type:", expression.Type().ToString(), "--", expression.ToString())
+	log.Println("NodeType:", expression.NodeType(), "Type:", expression.Type(), "--", expression)
 
 	visitor, err := expr.CreateVisitorFromExpression(expression)
 	if err != nil {
@@ -27,7 +27,7 @@ func main() {
 	}
 
 	// for _, token := range parser.GetTokens() {
-	// 	log.Printf("token - kind: %s, text: %s", token.Type.ToString(), token.Text)
+	// 	log.Printf("token - kind: %s, text: %s", token.Type, token.Text)
 	// }
 
 	// result, err := parser.Evaluate(nil)

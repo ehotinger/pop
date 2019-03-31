@@ -49,7 +49,7 @@ func TestToString(t *testing.T) {
 			"300",
 		},
 	} {
-		if actual := test.expr.ToString(); actual != test.expected {
+		if actual := test.expr.String(); actual != test.expected {
 			t.Fatalf("expected %v but got %v", test.expected, actual)
 		}
 	}

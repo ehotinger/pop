@@ -48,15 +48,15 @@ func (e *BinaryExpression) NodeType() string {
 	return "BinaryExpression"
 }
 
-func (e *BinaryExpression) ToString() string {
+func (e *BinaryExpression) String() string {
 	if e == nil {
 		return "<nil>"
 	}
 	operator := e.GetOperator()
 	if operator == "" {
-		return fmt.Sprintf("%s (%s, %s)", e.self.ToString(), e.left.ToString(), e.right.ToString())
+		return fmt.Sprintf("%v (%v, %v)", e.self, e.left, e.right)
 	}
-	return fmt.Sprintf("(%s %s %s)", e.left.ToString(), operator, e.right.ToString())
+	return fmt.Sprintf("(%v %v %v)", e.left, operator, e.right)
 }
 
 func (e *BinaryExpression) GetOperator() string {

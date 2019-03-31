@@ -104,7 +104,7 @@ const (
 	UnknownString          = "Unknown"
 )
 
-func (t TokenType) ToString() string {
+func (t TokenType) String() string {
 	switch t {
 	case Exclamation:
 		return ExclamationString

@@ -22,8 +22,8 @@ func TestNewBinaryExpression(t *testing.T) {
 		},
 	} {
 		expr := NewBinaryExpression(test.nodeType, test.left, test.right, test.kind)
-		if actual := expr.ToString(); actual != test.expected {
-			t.Fatalf("expected %v but got %v", test.expected, expr.ToString())
+		if actual := expr.String(); actual != test.expected {
+			t.Fatalf("expected %v but got %v", test.expected, expr.String())
 		}
 	}
 }
@@ -54,8 +54,8 @@ func TestBinaryExpressionToString(t *testing.T) {
 			"(5 <= 6)",
 		},
 	} {
-		if actual := test.expr.ToString(); actual != test.expected {
-			t.Fatalf("expected %v but got %v", test.expected, test.expr.ToString())
+		if actual := test.expr.String(); actual != test.expected {
+			t.Fatalf("expected %v but got %v", test.expected, test.expr.String())
 		}
 	}
 }

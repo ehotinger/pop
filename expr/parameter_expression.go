@@ -33,7 +33,7 @@ func (e *ParameterExpression) NodeType() string {
 	return "ParameterExpression"
 }
 
-func (e *ParameterExpression) ToString() string {
+func (e *ParameterExpression) String() string {
 	if e.name == "" {
 		return "<param>"
 	}

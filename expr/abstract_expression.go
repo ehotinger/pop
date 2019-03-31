@@ -7,7 +7,7 @@ type AbstractExpression struct {
 	kind     reflect.Kind
 }
 
-func (e *AbstractExpression) ToString() string {
+func (e *AbstractExpression) String() string {
 	if e == nil {
 		return "UnknownExpr"
 	}

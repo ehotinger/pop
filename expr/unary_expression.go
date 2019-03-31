@@ -37,19 +37,19 @@ func (e *UnaryExpression) NodeType() string {
 	return "UnaryExpression"
 }
 
-func (e *UnaryExpression) ToString() string {
+func (e *UnaryExpression) String() string {
 	if e == nil {
 		return "<nil>"
 	}
 	switch e.self.nodeType {
 	case NotExpr:
-		return fmt.Sprintf("Not(%s)", e.operand.ToString())
+		return fmt.Sprintf("Not(%v)", e.operand)
 	case NegateExpr:
-		return fmt.Sprintf("-%s", e.operand.ToString())
+		return fmt.Sprintf("-%v", e.operand)
 	case UnaryPlusExpr:
-		return fmt.Sprintf("+%s", e.operand.ToString())
+		return fmt.Sprintf("+%v", e.operand)
 	default:
-		return fmt.Sprintf("(%s)", e.operand.ToString())
+		return fmt.Sprintf("(%v)", e.operand)
 	}
 }
 
