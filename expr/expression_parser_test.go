@@ -183,7 +183,7 @@ func TestNewExpressionParser(t *testing.T) {
 			},
 		},
 	} {
-		parser, err := NewExpressionParser(test.expression)
+		parser, err := NewExpressionParser(test.expression, nil)
 		if err != nil {
 			t.Fatalf("test: %s - unexpected error while creating expression parser: %v", test.name, err)
 		}

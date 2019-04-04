@@ -14,8 +14,8 @@ type ExpressionParser struct {
 	tokens    []*Token
 }
 
-func NewExpressionParser(expression string) (ep *ExpressionParser, err error) {
-	tokenizer, err := NewTokenizer(expression)
+func NewExpressionParser(expression string, parameters map[string]interface{}) (ep *ExpressionParser, err error) {
+	tokenizer, err := NewTokenizer(expression, parameters)
 	if err != nil {
 		return nil, err
 	}

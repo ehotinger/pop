@@ -7,7 +7,10 @@ import (
 )
 
 func main() {
-	parser, err := expr.NewExpressionParser(`1 + 5 - 3 == 0`)
+	parameters := make(map[string]interface{})
+	parameters["a"] = 3
+	parameters["b"] = 4
+	parser, err := expr.NewExpressionParser(`a == b`, parameters)
 	if err != nil {
 		log.Fatal(err)
 	}

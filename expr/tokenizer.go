@@ -20,16 +20,16 @@ type Tokenizer struct {
 	position int
 	length   int
 
-	token *Token
-	ch    rune
+	parameters map[string]interface{}
+	token      *Token
+	ch         rune
 }
 
 // NewTokenizer creates a new Tokenizer for the provided expression.
-func NewTokenizer(expression string) (t *Tokenizer, err error) {
+func NewTokenizer(expression string, parameters map[string]interface{}) (t *Tokenizer, err error) {
 	if expression == "" {
 		return t, errMissingExpression
 	}
-
 	var text []rune
 	for _, ch := range expression {
 		text = append(text, ch)
@@ -37,6 +37,11 @@ func NewTokenizer(expression string) (t *Tokenizer, err error) {
 	t = &Tokenizer{
 		text:   text,
 		length: len(text),
+	}
+	if parameters == nil {
+		t.parameters = make(map[string]interface{})
+	} else {
+		t.parameters = parameters
 	}
 	t.SetPosition(0)
 	return t, err
@@ -500,8 +505,14 @@ func (t *Tokenizer) ParseIdentifier() (Expression, error) {
 	if t.token.Type != Identifier {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", Identifier, t.token.Type)
 	}
-	// TODO: impl
-	return nil, nil
+	txt := t.token.Text
+	if err := t.NextToken(); err != nil {
+		return nil, err
+	}
+	if val, ok := t.parameters[txt]; ok {
+		return CreateLiteral(val, txt), nil
+	}
+	return nil, fmt.Errorf("unknown identifier: %s", t.token.Text)
 }
 
 func (t *Tokenizer) ParseStringLiteral() (Expression, error) {
@@ -589,6 +600,7 @@ func (t *Tokenizer) GenerateConditional(
 	return nil, errUnimplemented
 }
 
+// TODO: text is unused
 func CreateLiteral(value interface{}, text string) Expression {
 	return NewConstantExpression(value, reflect.TypeOf(value).Kind())
 }

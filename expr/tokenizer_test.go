@@ -14,7 +14,7 @@ func TestNewTokenizer(t *testing.T) {
 		{"", []rune{}, true},
 		{"1 > 0", []rune{49, 32, 62, 32, 48}, false},
 	} {
-		tokenizer, err := NewTokenizer(test.expression)
+		tokenizer, err := NewTokenizer(test.expression, nil)
 		if test.shouldError && err != nil {
 			continue
 		} else if test.shouldError && err == nil {
@@ -39,7 +39,7 @@ func TestNextChar(t *testing.T) {
 		{"abc", []rune{'a', 'b', 'c', '\000', '\000'}},
 		{"1 > 0", []rune{'1', ' ', '>', ' ', '0', '\000'}},
 	} {
-		tokenizer, err := NewTokenizer(test.expression)
+		tokenizer, err := NewTokenizer(test.expression, nil)
 		if err != nil {
 			t.Fatalf("unexpected err: %v", err)
 		}
@@ -59,7 +59,7 @@ func TestSetPosition(t *testing.T) {
 		{50},
 		{0},
 	} {
-		tokenizer, err := NewTokenizer("1 > 0")
+		tokenizer, err := NewTokenizer("1 > 0", nil)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
 		}
@@ -81,7 +81,7 @@ func TestHasNext(t *testing.T) {
 		{"1 > 0", 0, true},
 		{"1", 0, true},
 	} {
-		tokenizer, err := NewTokenizer(test.expression)
+		tokenizer, err := NewTokenizer(test.expression, nil)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
 		}
