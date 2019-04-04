@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	parser, err := expr.NewExpressionParser(`1 + 5`)
+	parser, err := expr.NewExpressionParser(`1 + 5 - 3 == 0`)
 	if err != nil {
 		log.Fatal(err)
 	}
