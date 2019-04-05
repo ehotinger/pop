@@ -10,7 +10,7 @@ func main() {
 	parameters := make(map[string]interface{})
 	parameters["a"] = 10
 	parameters["b"] = 2
-	parser, err := expr.NewExpressionParser(`a + b`, parameters)
+	parser, err := expr.NewExpressionParser(`a + b * 30 + 5 - 20 - 900`, parameters)
 	if err != nil {
 		log.Fatal(err)
 	}

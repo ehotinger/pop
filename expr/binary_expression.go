@@ -162,10 +162,11 @@ func CreateAdd(left Expression, right Expression) (Expression, error) {
 	if err := validateLeftAndRight(left, right); err != nil {
 		return nil, err
 	}
-	if left.Kind() == right.Kind() && IsArithmetic(left.Kind()) {
+	// TODO: String concat
+	if IsArithmetic(left.Kind()) && IsArithmetic(right.Kind()) {
 		return NewBinaryExpression(AddExpr, left, right, left.Kind()), nil
 	}
-	return nil, errors.New("invalid expression")
+	return nil, fmt.Errorf("invalid expression, left or right isn't arithmetic: %v, %v", left.Kind(), right.Kind())
 }
 
 func CreateSubtract(left Expression, right Expression) (Expression, error) {

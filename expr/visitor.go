@@ -62,13 +62,21 @@ func (v *BinaryVisitor) Visit() (interface{}, error) {
 
 	switch v.root.Type() {
 	case AddExpr:
-		return lVal.(int) + rVal.(int), nil
+		lInt, rInt, err := convertExpressionToInt(lVal, rVal)
+		if err != nil {
+			return nil, err
+		}
+		return lInt + rInt, nil
 	case AddCheckedExpr:
 		return nil, errors.New("unimplemented")
 	case AndAlsoExpr:
 		return nil, errors.New("unimplemented")
 	case DivideExpr:
-		return lVal.(int) / rVal.(int), nil
+		lInt, rInt, err := convertExpressionToInt(lVal, rVal)
+		if err != nil {
+			return nil, err
+		}
+		return lInt / rInt, nil
 	case EqualExpr:
 		return true, errors.New("unimplemented")
 	case ExclusiveOrExpr:
@@ -82,7 +90,11 @@ func (v *BinaryVisitor) Visit() (interface{}, error) {
 	case LessThanOrEqualExpr:
 		return true, errors.New("unimplemented")
 	case MultiplyExpr:
-		return lVal.(int) * rVal.(int), nil
+		lInt, rInt, err := convertExpressionToInt(lVal, rVal)
+		if err != nil {
+			return nil, err
+		}
+		return lInt * rInt, nil
 	case MultiplyCheckedExpr:
 		return nil, errors.New("unimplemented")
 	case OrExpr:
@@ -92,7 +104,11 @@ func (v *BinaryVisitor) Visit() (interface{}, error) {
 	case PowerExpr:
 		return nil, errors.New("unimplemented")
 	case SubtractExpr:
-		return lVal.(int) - rVal.(int), nil
+		lInt, rInt, err := convertExpressionToInt(lVal, rVal)
+		if err != nil {
+			return nil, err
+		}
+		return lInt - rInt, nil
 	case SubtractCheckedExpr:
 		return nil, errors.New("unimplemented")
 	}
@@ -111,7 +127,6 @@ func NewConstantVisitor(root *ConstantExpression) *ConstantVisitor {
 }
 
 func (v *ConstantVisitor) Visit() (interface{}, error) {
-	log.Println("[constant]", v.root)
 	return v.root.value, nil
 }
 
@@ -126,7 +141,6 @@ func NewParameterVisitor(root *ParameterExpression) *ParameterVisitor {
 }
 
 func (v *ParameterVisitor) Visit() (interface{}, error) {
-	log.Println("[param]", v.root)
 	return false, nil
 }
 
@@ -151,4 +165,44 @@ func (v *UnaryVisitor) Visit() (interface{}, error) {
 	}
 
 	return nil, fmt.Errorf("unknown expression type: %v", v.root.Type())
+}
+
+func convertToInt(val interface{}) (int, error) {
+	switch t := val.(type) {
+	case int:
+		return t, nil
+	case uint:
+		return int(t), nil
+	case int8:
+		return int(t), nil
+	case uint8:
+		return int(t), nil
+	case int16:
+		return int(t), nil
+	case uint16:
+		return int(t), nil
+	case int32:
+		return int(t), nil
+	case uint32:
+		return int(t), nil
+	case int64:
+		return int(t), nil
+	case uint64:
+		return int(t), nil
+	case float32:
+		return int(t), nil
+	case float64:
+		return int(t), nil
+	}
+
+	return 0, fmt.Errorf("unable to convert value to integer: %v", val)
+}
+
+func convertExpressionToInt(leftVal interface{}, rightVal interface{}) (left int, right int, err error) {
+	left, err = convertToInt(leftVal)
+	if err != nil {
+		return left, right, err
+	}
+	right, err = convertToInt(rightVal)
+	return left, right, err
 }
