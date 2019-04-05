@@ -454,9 +454,9 @@ func (t *Tokenizer) ParseMultiplicative() (Expression, error) {
 	return left, err
 }
 
-// -, !
+// -, !, +
 func (t *Tokenizer) ParseUnary() (Expression, error) {
-	if t.token.Type == Minus || t.token.Type == Exclamation {
+	if t.token.Type == Minus || t.token.Type == Exclamation || t.token.Type == Plus {
 		operator := t.token
 		if err := t.NextToken(); err != nil {
 			return nil, err
@@ -473,9 +473,11 @@ func (t *Tokenizer) ParseUnary() (Expression, error) {
 		}
 		// TODO: Promote
 		if operator.Type == Minus {
-			expr, err = CreateNegate(expr)
+			expr, err = CreateUnaryNegate(expr)
+		} else if operator.Type == Plus {
+			expr, err = CreateUnaryPlus(expr)
 		} else {
-			expr, err = CreateNot(expr)
+			expr, err = CreateUnaryNot(expr)
 		}
 		return expr, err
 	}

@@ -18,6 +18,12 @@ func CreateVisitorFromExpression(node Expression) (Visitor, error) {
 		return NewConstantVisitor(node.(*ConstantExpression)), nil
 	case ParameterExpr:
 		return NewParameterVisitor(node.(*ParameterExpression)), nil
+	case NegateExpr:
+		fallthrough
+	case UnaryPlusExpr:
+		fallthrough
+	case NotExpr:
+		return NewUnaryVisitor(node.(*UnaryExpression)), nil
 	default:
 		return NewBinaryVisitor(node.(*BinaryExpression)), nil
 	}
@@ -122,4 +128,27 @@ func NewParameterVisitor(root *ParameterExpression) *ParameterVisitor {
 func (v *ParameterVisitor) Visit() (interface{}, error) {
 	log.Println("[param]", v.root)
 	return false, nil
+}
+
+type UnaryVisitor struct {
+	root *UnaryExpression
+}
+
+func NewUnaryVisitor(root *UnaryExpression) *UnaryVisitor {
+	return &UnaryVisitor{
+		root: root,
+	}
+}
+
+func (v *UnaryVisitor) Visit() (interface{}, error) {
+	switch v.root.Type() {
+	case NegateExpr:
+		return nil, errors.New("unimplemented")
+	case UnaryPlusExpr:
+		return nil, errors.New("unimplemented")
+	case NotExpr:
+		return nil, errors.New("unimplemented")
+	}
+
+	return nil, fmt.Errorf("unknown expression type: %v", v.root.Type())
 }

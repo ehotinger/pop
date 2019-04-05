@@ -49,18 +49,25 @@ func (e *UnaryExpression) String() string {
 	case UnaryPlusExpr:
 		return fmt.Sprintf("+%v", e.operand)
 	default:
-		return fmt.Sprintf("(%v)", e.operand)
+		return fmt.Sprintf("unary(%v)", e.operand)
 	}
 }
 
-func CreateNegate(expr Expression) (Expression, error) {
+func CreateUnaryPlus(expr Expression) (Expression, error) {
+	if expr == nil {
+		return nil, errInvalidExpression
+	}
+	return NewUnaryExpression(expr, UnaryPlusExpr, expr.Kind()), nil
+}
+
+func CreateUnaryNegate(expr Expression) (Expression, error) {
 	if expr == nil {
 		return nil, errInvalidExpression
 	}
 	return NewUnaryExpression(expr, NegateExpr, expr.Kind()), nil
 }
 
-func CreateNot(expr Expression) (Expression, error) {
+func CreateUnaryNot(expr Expression) (Expression, error) {
 	if expr == nil {
 		return nil, errInvalidExpression
 	}
