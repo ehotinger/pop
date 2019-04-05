@@ -166,3 +166,19 @@ func IsArithmetic(t reflect.Kind) bool {
 		return false
 	}
 }
+
+func IsUnsigned(t reflect.Kind) bool {
+	switch t {
+	case reflect.Uint:
+		return true
+	case reflect.Uint8:
+		return true
+	case reflect.Uint16:
+		return true
+	case reflect.Uint32:
+		return true
+	case reflect.Uint64:
+		return true
+	}
+	return false
+}

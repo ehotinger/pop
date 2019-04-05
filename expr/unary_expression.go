@@ -57,14 +57,21 @@ func CreateUnaryPlus(expr Expression) (Expression, error) {
 	if expr == nil {
 		return nil, errInvalidExpression
 	}
-	return NewUnaryExpression(expr, UnaryPlusExpr, expr.Kind()), nil
+	if IsArithmetic(expr.Kind()) {
+		return NewUnaryExpression(expr, UnaryPlusExpr, expr.Kind()), nil
+	}
+	return nil, errors.New("unary plus not supported for non-arithmetic values")
 }
 
 func CreateUnaryNegate(expr Expression) (Expression, error) {
 	if expr == nil {
 		return nil, errInvalidExpression
 	}
-	return NewUnaryExpression(expr, NegateExpr, expr.Kind()), nil
+	if IsArithmetic(expr.Kind()) && IsUnsigned(expr.Kind()) {
+		return NewUnaryExpression(expr, NegateExpr, expr.Kind()), nil
+	}
+	// TODO: get user defined operator or throw
+	return nil, errors.New("unary negate not supported for non-arithmetic or unsigned values")
 }
 
 func CreateUnaryNot(expr Expression) (Expression, error) {
