@@ -505,14 +505,14 @@ func (t *Tokenizer) ParseIdentifier() (Expression, error) {
 	if t.token.Type != Identifier {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", Identifier, t.token.Type)
 	}
-	txt := t.token.Text
+	text := t.token.Text
 	if err := t.NextToken(); err != nil {
 		return nil, err
 	}
-	if val, ok := t.parameters[txt]; ok {
-		return CreateLiteral(val, txt), nil
+	if val, ok := t.parameters[text]; ok {
+		return CreateLiteral(val, text), nil
 	}
-	return nil, fmt.Errorf("unknown identifier: %s", t.token.Text)
+	return nil, fmt.Errorf("unknown identifier: %s", text)
 }
 
 func (t *Tokenizer) ParseStringLiteral() (Expression, error) {
@@ -531,14 +531,14 @@ func (t *Tokenizer) ParseIntegerLiteral() (Expression, error) {
 	if t.token.Type != IntegerLiteral {
 		return nil, fmt.Errorf("expected %v as the token type but got %v", IntegerLiteral, t.token.Type)
 	}
-	txt := t.token.Text
+	text := t.token.Text
 	var value interface{}
 	var err error
-	if txt[0] != '-' {
+	if text[0] != '-' {
 		// TODO: support parsing as 32, 16, etc.
-		value, err = strconv.ParseUint(txt, 10, 64)
+		value, err = strconv.ParseUint(text, 10, 64)
 	} else {
-		value, err = strconv.ParseInt(txt, 10, 64)
+		value, err = strconv.ParseInt(text, 10, 64)
 	}
 	if err != nil {
 		return nil, err
@@ -546,7 +546,7 @@ func (t *Tokenizer) ParseIntegerLiteral() (Expression, error) {
 	if err := t.NextToken(); err != nil {
 		return nil, err
 	}
-	return CreateLiteral(value, txt), nil
+	return CreateLiteral(value, text), nil
 }
 
 func (t *Tokenizer) ParseRealLiteral() (Expression, error) {
@@ -600,7 +600,7 @@ func (t *Tokenizer) GenerateConditional(
 	return nil, errUnimplemented
 }
 
-// TODO: text is unused
+// TODO: text is unused for now -- maintain a literals map?
 func CreateLiteral(value interface{}, text string) Expression {
 	return NewConstantExpression(value, reflect.TypeOf(value).Kind())
 }

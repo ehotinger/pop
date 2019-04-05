@@ -1,25 +1,26 @@
 package expr
 
 import (
+	"errors"
 	"fmt"
 	"log"
 )
 
 type Visitor interface {
-	Visit() error
+	Visit() (interface{}, error)
 }
 
 func CreateVisitorFromExpression(node Expression) (Visitor, error) {
 	switch node.Type() {
+	case UnknownExpr:
+		return nil, errors.New("unable to create visitor for unknown expression")
 	case ConstantExpr:
 		return NewConstantVisitor(node.(*ConstantExpression)), nil
 	case ParameterExpr:
 		return NewParameterVisitor(node.(*ParameterExpression)), nil
-	case AddExpr:
+	default:
 		return NewBinaryVisitor(node.(*BinaryExpression)), nil
 	}
-
-	return nil, fmt.Errorf("unable to create visitor for %v", node.Type())
 }
 
 type BinaryVisitor struct {
@@ -32,25 +33,65 @@ func NewBinaryVisitor(root *BinaryExpression) *BinaryVisitor {
 	}
 }
 
-func (v *BinaryVisitor) Visit() (err error) {
-	log.Println("[bin]")
+func (v *BinaryVisitor) Visit() (interface{}, error) {
 	var left Visitor
-	left, err = CreateVisitorFromExpression(v.root.left)
+	left, err := CreateVisitorFromExpression(v.root.left)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	log.Println("[left]")
-	err = left.Visit()
-	if err != nil {
-		return err
+	lVal, lErr := left.Visit()
+	if lErr != nil {
+		return nil, lErr
 	}
 	var right Visitor
 	right, err = CreateVisitorFromExpression(v.root.right)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	log.Println("[right]")
-	return right.Visit()
+	rVal, rErr := right.Visit()
+	if rErr != nil {
+		return nil, rErr
+	}
+	log.Println(v.root.String())
+
+	switch v.root.Type() {
+	case AddExpr:
+		return lVal.(int) + rVal.(int), nil
+	case AddCheckedExpr:
+		return nil, errors.New("unimplemented")
+	case AndAlsoExpr:
+		return nil, errors.New("unimplemented")
+	case DivideExpr:
+		return lVal.(int) / rVal.(int), nil
+	case EqualExpr:
+		return true, errors.New("unimplemented")
+	case ExclusiveOrExpr:
+		return nil, errors.New("unimplemented")
+	case GreaterThanExpr:
+		return true, errors.New("unimplemented")
+	case GreaterThanOrEqualExpr:
+		return true, errors.New("unimplemented")
+	case LessThanExpr:
+		return true, errors.New("unimplemented")
+	case LessThanOrEqualExpr:
+		return true, errors.New("unimplemented")
+	case MultiplyExpr:
+		return lVal.(int) * rVal.(int), nil
+	case MultiplyCheckedExpr:
+		return nil, errors.New("unimplemented")
+	case OrExpr:
+		return true, errors.New("unimplemented")
+	case OrElseExpr:
+		return true, errors.New("unimplemented")
+	case PowerExpr:
+		return nil, errors.New("unimplemented")
+	case SubtractExpr:
+		return lVal.(int) - rVal.(int), nil
+	case SubtractCheckedExpr:
+		return nil, errors.New("unimplemented")
+	}
+
+	return nil, fmt.Errorf("unknown expression type: %v", v.root.Type())
 }
 
 type ConstantVisitor struct {
@@ -63,9 +104,9 @@ func NewConstantVisitor(root *ConstantExpression) *ConstantVisitor {
 	}
 }
 
-func (v *ConstantVisitor) Visit() (err error) {
+func (v *ConstantVisitor) Visit() (interface{}, error) {
 	log.Println("[constant]", v.root)
-	return nil
+	return v.root.value, nil
 }
 
 type ParameterVisitor struct {
@@ -78,7 +119,7 @@ func NewParameterVisitor(root *ParameterExpression) *ParameterVisitor {
 	}
 }
 
-func (v *ParameterVisitor) Visit() (err error) {
+func (v *ParameterVisitor) Visit() (interface{}, error) {
 	log.Println("[param]", v.root)
-	return nil
+	return false, nil
 }

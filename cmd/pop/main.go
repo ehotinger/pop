@@ -8,9 +8,9 @@ import (
 
 func main() {
 	parameters := make(map[string]interface{})
-	parameters["a"] = 3
-	parameters["b"] = 4
-	parser, err := expr.NewExpressionParser(`a == b`, parameters)
+	parameters["a"] = 10
+	parameters["b"] = 2
+	parser, err := expr.NewExpressionParser(`a / b`, parameters)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,9 +25,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create visitor: %v", err)
 	}
-	if err := visitor.Visit(); err != nil {
+	val, err := visitor.Visit()
+	if err != nil {
 		log.Fatalf("failed traversal: %v", err)
 	}
+
+	log.Println("Interpreted value: ", val)
 
 	// for _, token := range parser.GetTokens() {
 	// 	log.Printf("token - kind: %s, text: %s", token.Type, token.Text)
